@@ -1,3 +1,12 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
 model Post {
   id          String   @id @default(cuid())
   authorName  String
@@ -8,10 +17,12 @@ model Post {
   tags        Tag[]    @relation("PostTags")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  @@map("post")
 }
 
 model Tag {
   id    Int     @id @default(autoincrement())
   name  String  @unique
   posts Post[]  @relation("PostTags")
+  @@map("tag")
 } 

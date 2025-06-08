@@ -1,24 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const tag = searchParams.get("tag");
+  let q = searchParams.get("tag");
+  if (q) q = q.trim();
   let posts;
-  if (tag) {
-    posts = await prisma.post.findMany({
-      where: {
-        tags: {
-          some: {
-            name: tag,
+  if (q && q.length > 0) {
+    if (q.startsWith("#")) {
+      const tagName = q.slice(1);
+      posts = await prisma.post.findMany({
+        where: {
+          tags: {
+            some: {
+              name: { equals: tagName, mode: "insensitive" },
+            },
           },
         },
-      },
-      include: { tags: true },
-      orderBy: { createdAt: "desc" },
-    });
+        include: { tags: true },
+        orderBy: { createdAt: "desc" },
+      });
+    } else {
+      posts = await prisma.post.findMany({
+        where: {
+          title: { contains: q, mode: "insensitive" },
+        },
+        include: { tags: true },
+        orderBy: { createdAt: "desc" },
+      });
+    }
   } else {
     posts = await prisma.post.findMany({
       include: { tags: true },

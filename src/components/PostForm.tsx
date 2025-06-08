@@ -48,63 +48,86 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative flex items-center justify-center min-h-[340px]"
+      className="w-full max-w-md mx-auto bg-[var(--card)]  p-8 flex flex-col gap-5 relative"
     >
-      {/* Central Title Card */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg p-6 z-10 w-64 flex flex-col items-center">
+      {/* <h2 className="text-2xl font-bold text-center mb-2 text-[var(--primary)]">
+        แปะโพสต์ใหม่
+      </h2> */}
+      <div className="flex flex-col gap-2">
+        <label
+          className="text-sm font-medium text-[var(--primary)]"
+          htmlFor="title"
+        >
+          หัวข้อ
+        </label>
         <input
-          className="text-lg font-bold text-center bg-transparent border-b border-primary focus:outline-none mb-2 w-full"
-          placeholder="Title"
+          id="title"
+          className="text-base px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent"
+          placeholder="ใส่หัวข้อโพสต์"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
         />
       </div>
-      {/* Content Card */}
-      <div className="absolute left-1/2 top-[15%] -translate-x-1/2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow p-4 w-56 flex flex-col items-center">
+      <div className="flex flex-col gap-2">
+        <label
+          className="text-sm font-medium text-[var(--primary)]"
+          htmlFor="content"
+        >
+          เนื้อหา
+        </label>
         <textarea
-          className="resize-none w-full bg-transparent border-b border-primary focus:outline-none text-sm"
-          placeholder="Content"
+          id="content"
+          className="resize-none px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent min-h-[80px]"
+          placeholder="เขียนเนื้อหาโพสต์..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
-          rows={3}
+          rows={4}
         />
       </div>
-      {/* Contact Info Card */}
-      <div className="absolute left-[15%] top-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow p-4 w-44 flex flex-col items-center">
+      <div className="flex flex-col gap-2">
+        <label
+          className="text-sm font-medium text-[var(--primary)]"
+          htmlFor="contactInfo"
+        >
+          ช่องทางติดต่อ{" "}
+          <span className="text-[var(--accent)] font-normal">(ไม่บังคับ)</span>
+        </label>
         <input
-          className="w-full bg-transparent border-b border-primary focus:outline-none text-sm"
-          placeholder="Contact Info (optional)"
+          id="contactInfo"
+          className="text-base px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent"
+          placeholder="Email, Line, ฯลฯ"
           value={contactInfo}
           onChange={(e) => setContactInfo(e.target.value)}
         />
       </div>
-      {/* Tags Card */}
-      <div className="absolute right-[15%] top-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow p-4 w-44 flex flex-col items-center">
+      <div className="flex flex-col gap-2">
+        <label
+          className="text-sm font-medium text-[var(--primary)]"
+          htmlFor="tags"
+        >
+          แท็ก
+        </label>
         <input
-          className="w-full bg-transparent border-b border-primary focus:outline-none text-sm"
-          placeholder="Tags (comma separated)"
+          id="tags"
+          className="text-base px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent"
+          placeholder="คั่นด้วย , เช่น event,news"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
           required
         />
       </div>
-      {/* Submit Button */}
-      <div className="absolute left-1/2 bottom-0 translate-x-[-50%] mb-2">
-        <button
-          type="submit"
-          className="bg-primary text-white rounded px-6 py-2 font-semibold shadow hover:bg-primary/90 transition-colors"
-          disabled={loading}
-        >
-          {loading ? "Posting..." : "Post"}
-        </button>
-      </div>
       {error && (
-        <div className="absolute left-1/2 top-full mt-4 -translate-x-1/2 text-red-500 text-sm">
-          {error}
-        </div>
+        <div className="text-red-500 text-sm text-center mt-2">{error}</div>
       )}
+      <button
+        type="submit"
+        className="mt-2 bg-[var(--button)] text-white rounded-lg px-6 py-2 font-semibold shadow hover:brightness-110 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+        disabled={loading}
+      >
+        {loading ? "กำลังโพสต์..." : "แปะโพสต์"}
+      </button>
     </form>
   );
 }
