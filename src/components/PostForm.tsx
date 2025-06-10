@@ -19,19 +19,21 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
     try {
       const textToModerate = `${title}\n\n${content}`;
       const moderateRes = await api.post("/api/moderate", {
-        body: JSON.stringify({ text: textToModerate }),
+        text: textToModerate,
       });
 
       const moderationResult = await moderateRes.data;
 
-      if (!moderateRes || moderationResult.flagged) {
+      if (moderationResult.flagged) {
         setError("ตรวจพบเนื้อหาที่ไม่เหมาะสม ไม่สามารถโพสต์ได้");
         setLoading(false);
         return;
       }
-    } catch (err) {
-      console.error(err);
-      setError("เกิดข้อผิดพลาดในการตรวจสอบเนื้อหา กรุณาลองใหม่อีกครั้ง");
+    } catch (err: any) {
+      console.error("Moderation request Failed:", err);
+      const errorMessage =
+        err.response?.data?.error || "เกิดข้อผิดลพาดในการตรสจสอบเนื้อหา";
+      setError(errorMessage);
       setLoading(false);
       return;
     }
@@ -44,28 +46,23 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
       return;
     }
 
-    // --- 2. ถ้าผ่านการตรวจสอบ ให้ทำการโพสต์ต่อไป ---
-    const res = await fetch("/api/posts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title,
-        content,
-        contactInfo,
-        tags,
-        authorName,
-        authorIpaddress: "",
-      }),
+    // Call api to create the post
+    const res = await api.post("/api/posts", {
+      title,
+      content,
+      contactInfo,
+      tags,
+      authorName,
+      authorIpaddress: "",
     });
-    if (res.ok) {
+    if (res) {
       setTitle("");
       setContent("");
       setContactInfo("");
       setTags("");
       onSuccess();
     } else {
-      const data = await res.json();
-      setError(data.error || "Failed to post.");
+      setError("Failed to post.");
     }
     setLoading(false);
   };
