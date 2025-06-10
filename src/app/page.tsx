@@ -4,7 +4,7 @@ import PostCard, { Post } from "../components/PostCard";
 import PostForm from "../components/PostForm";
 import { useRouter } from "next/navigation";
 
-// ขนาดบอร์ดและการ์ดสำหรับสุ่มตำแหน่ง
+// Constants for board and card dimensions
 const BOARD_WIDTH = 1200;
 const BOARD_HEIGHT = 900;
 const CARD_WIDTH = 340;
@@ -46,7 +46,6 @@ export default function Home() {
     fetchPosts(search.trim());
   };
 
-  // สุ่มตำแหน่งการ์ดแบบ scatter (random margin, zIndex, scale)
   const cardPositions = useMemo(() => {
     const positions: {
       left: number;

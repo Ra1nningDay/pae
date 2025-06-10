@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import api from "@/lib/axios";
 
 export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
   const [title, setTitle] = useState("");
@@ -13,6 +14,28 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    // Check if title and content are provided
+    try {
+      const textToModerate = `${title}\n\n${content}`;
+      const moderateRes = await api.post("/api/moderate", {
+        body: JSON.stringify({ text: textToModerate }),
+      });
+
+      const moderationResult = await moderateRes.data;
+
+      if (!moderateRes || moderationResult.flagged) {
+        setError("ตรวจพบเนื้อหาที่ไม่เหมาะสม ไม่สามารถโพสต์ได้");
+        setLoading(false);
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+      setError("เกิดข้อผิดพลาดในการตรวจสอบเนื้อหา กรุณาลองใหม่อีกครั้ง");
+      setLoading(false);
+      return;
+    }
+
     const authorName =
       typeof window !== "undefined" ? localStorage.getItem("pae_name") : "";
     if (!authorName) {
@@ -20,6 +43,8 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
       setLoading(false);
       return;
     }
+
+    // --- 2. ถ้าผ่านการตรวจสอบ ให้ทำการโพสต์ต่อไป ---
     const res = await fetch("/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,11 +73,9 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-md mx-auto bg-[var(--card)]  p-8 flex flex-col gap-5 relative"
+      className="w-full max-w-md mx-auto bg-[var(--card)] p-8 flex flex-col gap-5 relative"
     >
-      {/* <h2 className="text-2xl font-bold text-center mb-2 text-[var(--primary)]">
-        แปะโพสต์ใหม่
-      </h2> */}
+      {/* ... ส่วน JSX ที่เหลือเหมือนเดิมทั้งหมด ... */}
       <div className="flex flex-col gap-2">
         <label
           className="text-sm font-medium text-[var(--primary)]"
