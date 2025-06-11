@@ -212,17 +212,30 @@ docker-compose down -v
 ### Database Management
 
 ```bash
+# Quick schema sync (development prototyping)
+npx prisma db push
+# or
+npm run db:push
+
 # Generate Prisma client
 npx prisma generate
+# or
+npm run db:generate
 
-# Create and run migrations
+# Create and run migrations (recommended for teams)
 npx prisma migrate dev --name your_migration_name
+# or
+npm run db:migrate
 
 # Reset database (development only)
 npx prisma migrate reset
+# or
+npm run db:reset
 
-# Open Prisma Studio
+# Open Prisma Studio (database GUI)
 npx prisma studio
+# or
+npm run db:studio
 ```
 
 ### Code Quality
@@ -233,67 +246,6 @@ npm run lint
 
 # Type checking
 npx tsc --noEmit
-```
-
-### Available Scripts
-
-After setup, you can use these convenient scripts:
-
-```bash
-# Docker Development
-npm run docker:dev     # Start development environment
-npm run docker:down    # Stop all services
-npm run docker:reset   # Reset database and restart
-npm run docker:logs    # View application logs
-
-# Database Management
-npm run db:migrate     # Run database migrations
-npm run db:generate    # Generate Prisma client
-npm run db:studio      # Open Prisma Studio
-npm run db:reset       # Reset database (development only)
-
-# Standard Next.js
-npm run dev           # Start local development server
-npm run build         # Build for production
-npm run start         # Start production server
-npm run lint          # Run ESLint
-```
-
----
-
-## Troubleshooting
-
-### Common Issues
-
-**Port 3000 already in use:**
-
-```bash
-# Find and kill process using port 3000
-netstat -ano | findstr :3000
-taskkill /PID <PID> /F
-```
-
-**Database connection issues:**
-
-```bash
-# Reset database and restart
-docker-compose down -v
-docker-compose up --build
-```
-
-**Prisma client out of sync:**
-
-```bash
-# Regenerate Prisma client
-docker-compose exec app npx prisma generate
-```
-
-**Container build issues:**
-
-```bash
-# Clean rebuild
-docker-compose down --rmi all
-docker-compose up --build
 ```
 
 ### Useful Debug Commands
@@ -314,15 +266,43 @@ docker-compose exec app sh
 
 ---
 
-## Production Deployment
+## Available Scripts
 
-For production deployment, create a separate `Dockerfile` and `docker-compose.prod.yml`:
+### Docker Development
 
-1. Build optimized Next.js application
-2. Use multi-stage build for smaller image size
-3. Configure production environment variables
-4. Set up proper database credentials
-5. Configure reverse proxy (nginx)
-6. Set up SSL certificates
+```bash
+npm run docker:dev     # Start development environment with Docker
+npm run docker:down    # Stop all Docker services
+npm run docker:reset   # Reset database and restart containers
+npm run docker:logs    # View application logs
+```
 
-Refer to `DEVELOPMENT.md` for detailed development commands and workflows.
+### Database Management
+
+```bash
+npm run db:push        # Quick schema sync (prototyping)
+npm run db:migrate     # Create and run migrations (recommended)
+npm run db:generate    # Generate Prisma client
+npm run db:studio      # Open Prisma Studio (database GUI)
+npm run db:reset       # Reset database (development only)
+```
+
+### Standard Development
+
+```bash
+npm run dev           # Start local development server
+npm run build         # Build for production
+npm run start         # Start production server
+npm run lint          # Run ESLint
+```
+
+**Quick Start Commands:**
+
+- **First time setup**: `npm run docker:dev`
+- **Daily development**: `npm run dev` (local) or `npm run docker:dev` (Docker)
+- **Database changes**: `npm run db:push` (quick) or `npm run db:migrate` (proper)
+- **View database**: `npm run db:studio`
+
+```
+
+```
