@@ -1,3 +1,15 @@
+/**
+ *  api/posts/route.ts
+ *  Handles all post-related API requests
+ *
+ */
+
+/**
+ * @param Get - Fetches posts based on search query or returns all posts
+ * @param Post - Creates a new post with title, content, contact info, tags, and author details
+ *
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
