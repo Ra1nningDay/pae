@@ -307,7 +307,3 @@ npm run lint          # Run ESLint
 - **Daily development**: `npm run dev` (local) or `npm run docker:dev` (Docker)
 - **Database changes**: `npm run db:push` (quick) or `npm run db:migrate` (proper)
 - **View database**: `npm run db:studio`
-
-```
-
-```
