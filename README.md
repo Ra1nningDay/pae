@@ -4,7 +4,7 @@ A modern, graphical web app for university students to post and view announcemen
 
 ---
 
-## 🚀 Project Overview
+## Project Overview
 
 **#Pae** is a digital board for university students to:
 
@@ -15,7 +15,7 @@ A modern, graphical web app for university students to post and view announcemen
 
 ---
 
-## ✨ Features
+## Features
 
 - **Welcome Page**: First-time users enter their name (stored in localStorage)
 - **Homepage**: View all posts, search/filter by hashtags, create new posts
@@ -26,17 +26,53 @@ A modern, graphical web app for university students to post and view announcemen
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Framework**: Next.js (App Router)
+- **Frontend**: Next.js 15 (App Router) + React 19
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS, shadcn/ui
-- **ORM**: Prisma
-- **Database**: PostgreSQL
+- **Styling**: Tailwind CSS v4 + shadcn/ui
+- **Database**: PostgreSQL + Prisma ORM
+- **Content Moderation**: Thai bad words filter
+- **Development**: Docker + Docker Compose
+- **Package Manager**: pnpm
 
 ---
 
-## 📦 Setup & Installation
+## Setup & Installation
+
+### Option 1: Docker Development (Recommended)
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <your-repo-url>
+   cd blogs-demo
+   ```
+
+2. **Copy environment variables**
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Start with Docker Compose**
+
+   ```bash
+   docker-compose up --build
+   ```
+
+   This will:
+
+   - Start PostgreSQL database
+   - Install dependencies
+   - Run Prisma migrations
+   - Start the Next.js development server
+
+4. **Access the application**
+   - Frontend: http://localhost:3000
+   - Database: PostgreSQL on localhost:5432
+
+### Option 2: Local Development
 
 1. **Clone the repository**
 
@@ -58,7 +94,7 @@ A modern, graphical web app for university students to post and view announcemen
 3. **Configure your database**
 
    - Create a PostgreSQL database
-   - Set your connection string in `.env`:
+   - Copy `.env.example` to `.env` and update:
      ```env
      DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
      ```
@@ -80,7 +116,7 @@ A modern, graphical web app for university students to post and view announcemen
 
 ---
 
-## 🖥️ Usage
+## Usage
 
 - Visit `/welcome` to enter your name (first time only)
 - View and search posts on the homepage
@@ -89,22 +125,204 @@ A modern, graphical web app for university students to post and view announcemen
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
-- `src/app/welcome/page.tsx` – Name entry screen
-- `src/app/ayout.tsx` – Shared layout and name validation
-- `src/app/page.tsx` – Main board page
-- `components/PostForm.tsx` – Graphical post creation form
-- `components/PostCard.tsx` – Post display card
-- `app/api/posts/route.ts` – API routes for posts
-- `prisma/schema.prisma` – Database schema
+```
+blogs-demo/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # Main layout with shared components
+│   │   ├── page.tsx            # Homepage - main board
+│   │   ├── welcome/
+│   │   │   └── page.tsx        # Name entry screen
+│   │   └── api/
+│   │       ├── posts/
+│   │       │   └── route.ts    # CRUD API for posts
+│   │       └── moderate/
+│   │           └── route.ts    # Content moderation API
+│   ├── components/
+│   │   ├── PostForm.tsx        # Graphical post creation form
+│   │   └── PostCard.tsx        # Post display card
+│   └── lib/
+│       └── axios.ts            # API client configuration
+├── prisma/
+│   ├── schema.prisma           # Database schema (Post, Tag models)
+│   └── migrations/             # Database migrations
+├── docker-compose.yml          # Docker services configuration
+├── Dockerfile.dev              # Development Docker image
+├── .env.example               # Environment variables template
+└── README.md                  # Project documentation
+```
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork this repo
 2. Create a new branch (`git checkout -b feature/your-feature`)
 3. Commit your changes (`git commit -m 'feat: add new feature'`)
 4. Push to your branch (`git push origin feature/your-feature`)
 5. Open a Pull Request
+
+---
+
+## Docker Development
+
+The project includes Docker configuration for easy development setup:
+
+### Quick Start with Docker
+
+```bash
+# Start all services
+docker-compose up --build
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f app
+```
+
+### Docker Services
+
+- **app**: Next.js application (port 3000)
+- **postgres**: PostgreSQL database (port 5432)
+
+### Useful Docker Commands
+
+```bash
+# Rebuild and start
+docker-compose up --build
+
+# Run Prisma commands in container
+docker-compose exec app npx prisma migrate dev
+docker-compose exec app npx prisma studio
+
+# Access database directly
+docker-compose exec postgres psql -U postgres -d pae_board
+
+# Clean up volumes (reset database)
+docker-compose down -v
+```
+
+---
+
+## Development Tools
+
+### Database Management
+
+```bash
+# Generate Prisma client
+npx prisma generate
+
+# Create and run migrations
+npx prisma migrate dev --name your_migration_name
+
+# Reset database (development only)
+npx prisma migrate reset
+
+# Open Prisma Studio
+npx prisma studio
+```
+
+### Code Quality
+
+```bash
+# Run linting
+npm run lint
+
+# Type checking
+npx tsc --noEmit
+```
+
+### Available Scripts
+
+After setup, you can use these convenient scripts:
+
+```bash
+# Docker Development
+npm run docker:dev     # Start development environment
+npm run docker:down    # Stop all services
+npm run docker:reset   # Reset database and restart
+npm run docker:logs    # View application logs
+
+# Database Management
+npm run db:migrate     # Run database migrations
+npm run db:generate    # Generate Prisma client
+npm run db:studio      # Open Prisma Studio
+npm run db:reset       # Reset database (development only)
+
+# Standard Next.js
+npm run dev           # Start local development server
+npm run build         # Build for production
+npm run start         # Start production server
+npm run lint          # Run ESLint
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**Port 3000 already in use:**
+
+```bash
+# Find and kill process using port 3000
+netstat -ano | findstr :3000
+taskkill /PID <PID> /F
+```
+
+**Database connection issues:**
+
+```bash
+# Reset database and restart
+docker-compose down -v
+docker-compose up --build
+```
+
+**Prisma client out of sync:**
+
+```bash
+# Regenerate Prisma client
+docker-compose exec app npx prisma generate
+```
+
+**Container build issues:**
+
+```bash
+# Clean rebuild
+docker-compose down --rmi all
+docker-compose up --build
+```
+
+### Useful Debug Commands
+
+```bash
+# Check container status
+docker-compose ps
+
+# View all logs
+docker-compose logs
+
+# Check database connectivity
+docker-compose exec postgres pg_isready -U postgres
+
+# Access container shell
+docker-compose exec app sh
+```
+
+---
+
+## Production Deployment
+
+For production deployment, create a separate `Dockerfile` and `docker-compose.prod.yml`:
+
+1. Build optimized Next.js application
+2. Use multi-stage build for smaller image size
+3. Configure production environment variables
+4. Set up proper database credentials
+5. Configure reverse proxy (nginx)
+6. Set up SSL certificates
+
+Refer to `DEVELOPMENT.md` for detailed development commands and workflows.
