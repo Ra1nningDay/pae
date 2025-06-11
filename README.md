@@ -1,6 +1,6 @@
 # #Pae – Student Announcement Board
 
-A modern, graphical web app for university students to post and view announcements. Built with Next.js (App Router), TypeScript, Tailwind CSS, shadcn/ui, Prisma, and PostgreSQL.
+A web app for university students to post and view announcements.
 
 ---
 
@@ -69,8 +69,15 @@ A modern, graphical web app for university students to post and view announcemen
    - Start the Next.js development server
 
 4. **Access the application**
+
    - Frontend: http://localhost:3000
    - Database: PostgreSQL on localhost:5432
+
+5. **Troubleshooting (If database issues occur)**
+   ```bash
+   # If server can't access database or tables don't exist
+   docker-compose exec app npx prisma db push
+   ```
 
 ### Option 2: Local Development
 
