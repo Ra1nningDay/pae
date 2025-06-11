@@ -65,7 +65,7 @@ export default function Home() {
       positions.push({ left, top, rotate, z, scale });
     }
     return positions;
-  }, [posts.length, search]);
+  }, [posts.length]);
 
   return (
     <div

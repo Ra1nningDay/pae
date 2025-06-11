@@ -18,6 +18,9 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
     // Check if title and content are provided
     try {
       const textToModerate = `${title}\n\n${content}`;
+      //**
+      // เปลี่ยน Api call จากใช้งานด้วยการเรียกผ่าน cilent component ย้ายไปไว้ใน server component **/lib/api/postRequest.ts
+      //  */
       const moderateRes = await api.post("/api/moderate", {
         text: textToModerate,
       });
@@ -29,10 +32,11 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
         setLoading(false);
         return;
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // Handle moderation request error
       console.error("Moderation request Failed:", err);
       const errorMessage =
-        err.response?.data?.error || "เกิดข้อผิดลพาดในการตรสจสอบเนื้อหา";
+        err instanceof Error ? err.message : "Moderation request failed";
       setError(errorMessage);
       setLoading(false);
       return;
@@ -47,6 +51,9 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
     }
 
     // Call api to create the post
+    //**
+    // เปลี่ยน Api call จากใช้งานด้วยการเรียกผ่าน cilent component ย้ายไปไว้ใน server component **/lib/api/postRequest.ts
+    //  */
     const res = await api.post("/api/posts", {
       title,
       content,
