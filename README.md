@@ -94,6 +94,11 @@ A modern, graphical web app for university students to post and view announcemen
 3. **Configure your database**
 
    - Create a PostgreSQL database
+     ```bash
+     npx prisma db push
+     # or
+     npm run db:push
+     ```
    - Copy `.env.example` to `.env` and update:
      ```env
      DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
