@@ -1,7 +1,5 @@
 /**
- *  api/posts/route.ts
  *  Handles all post-related API requests
- *
  */
 
 /**

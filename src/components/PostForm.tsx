@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import api from "@/lib/axios";
 
 export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
+  //**
+  // โจทย์ ให้เรียนรู้การใช้ zustand เพื่อจัดการ multi-state จากตอนแรกที่ใช้ useState ให้เปลี่ยนไปใช้ zustand โดยการสร้าง store สำหรับจัดการ state ของโพสต์, การค้นหา, การแสดง modal และสถานะการโหลด โดยนำไปไว้ที่ src/store/postStore.ts จากนั้นเรียกใช้งาน store นี้ใน component นี้
+  // */
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [contactInfo, setContactInfo] = useState("");
@@ -19,7 +22,7 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
     try {
       const textToModerate = `${title}\n\n${content}`;
       //**
-      // เปลี่ยน Api call จากใช้งานด้วยการเรียกผ่าน cilent component ย้ายไปไว้ใน server component **/lib/api/postRequest.ts
+      // เปลี่ยน Api call จากใช้งานด้วยการเรียกผ่าน cilent component ย้ายไปไว้ใน server component **/lib/api/moderateRequest.ts
       //  */
       const moderateRes = await api.post("/api/moderate", {
         text: textToModerate,

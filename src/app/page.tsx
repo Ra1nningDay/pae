@@ -3,6 +3,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import PostCard, { Post } from "../components/PostCard";
 import PostForm from "../components/PostForm";
 import { useRouter } from "next/navigation";
+import api from "@/lib/axios";
 
 // Constants for board and card dimensions
 const BOARD_WIDTH = 1200;
@@ -11,6 +12,9 @@ const CARD_WIDTH = 340;
 const CARD_HEIGHT = 210;
 
 export default function Home() {
+  //**
+  // โจทย์ ให้เรียนรู้การใช้ zustand เพื่อจัดการ multi-state จากตอนแรกที่ใช้ useState ให้เปลี่ยนไปใช้ zustand โดยการสร้าง store สำหรับจัดการ state ของโพสต์, การค้นหา, การแสดง modal และสถานะการโหลด โดยนำไปไว้ที่ src/store/postStore.ts จากนั้นเรียกใช้งาน store นี้ใน component นี้
+  // */
   const [posts, setPosts] = useState<Post[]>([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -26,13 +30,16 @@ export default function Home() {
     }
   }, [router]);
 
+  //**
+  // เปลี่ยน api call จากตอนแรกใช้งานด้วยการเรียกผ่าน client component ให้ย้ายไปไว้ใน server component **/lib/api/postRequest.ts
+  //  */
   const fetchPosts = async (tag?: string) => {
     setLoading(true);
     const url = tag
       ? `/api/posts?tag=${encodeURIComponent(tag)}`
       : "/api/posts";
-    const res = await fetch(url);
-    const data = await res.json();
+    const res = await api.get(url);
+    const data = await res.data;
     setPosts(data);
     setLoading(false);
   };
@@ -59,9 +66,9 @@ export default function Home() {
       const left = Math.random() * (BOARD_WIDTH - CARD_WIDTH - margin) + margin;
       const top =
         Math.random() * (BOARD_HEIGHT - CARD_HEIGHT - margin) + margin;
-      const rotate = Math.random() * 18 - 9; // -9 ถึง +9 องศา
+      const rotate = Math.random() * 18 - 9;
       const z = Math.floor(Math.random() * 20) + 10;
-      const scale = 0.96 + Math.random() * 0.08; // 0.96 - 1.04
+      const scale = 0.96 + Math.random() * 0.08;
       positions.push({ left, top, rotate, z, scale });
     }
     return positions;
