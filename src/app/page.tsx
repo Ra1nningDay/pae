@@ -26,6 +26,10 @@ export default function Home() {
     }
   }, [router]);
 
+  // Call api to create the post
+  //**
+  // เปลี่ยน Api call จากใช้งานด้วยการเรียกผ่าน cilent component ย้ายไปไว้ใน server component **/lib/api/postRequest.ts
+  //  */
   const fetchPosts = async (tag?: string) => {
     setLoading(true);
     const url = tag
@@ -36,16 +40,27 @@ export default function Home() {
     setPosts(data);
     setLoading(false);
   };
-
   useEffect(() => {
     fetchPosts();
   }, []);
 
+  // Real-time search with debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search.trim()) {
+        fetchPosts(search.trim());
+      } else {
+        fetchPosts();
+      }
+    }, 300); // debounce 300ms
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchPosts(search.trim());
+    // Form submit จะไม่ต้องทำอะไรเพราะมี useEffect handle แล้ว
   };
-
   const cardPositions = useMemo(() => {
     const positions: {
       left: number;
@@ -65,7 +80,7 @@ export default function Home() {
       positions.push({ left, top, rotate, z, scale });
     }
     return positions;
-  }, [posts.length]);
+  }, [posts]);
 
   return (
     <div
@@ -81,24 +96,50 @@ export default function Home() {
       </h1>
       {/* Content */}
       <div className="relative z-10">
+        {" "}
         {/* Search Bar */}
         <header className="flex justify-center py-8 z-20">
           <form onSubmit={handleSearch} className="w-full max-w-lg flex gap-2">
-            <input
-              type="text"
-              placeholder="ค้นหา #tag หรือคำค้นหา"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="border border-[var(--card-border)] rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] w-full text-lg shadow bg-[var(--card)] text-[var(--foreground)]"
-            />
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="ค้นหา #tag หรือคำค้นหา"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="border border-[var(--card-border)] rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] w-full text-lg shadow bg-[var(--card)] text-[var(--foreground)]"
+              />
+              {loading && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <div className="animate-spin h-5 w-5 border-2 border-[var(--primary)] border-t-transparent rounded-full"></div>
+                </div>
+              )}
+            </div>
             <button
               type="submit"
               className="bg-[var(--button)] text-white rounded px-6 py-3 font-semibold hover:brightness-110 transition-colors shadow text-lg"
             >
               ค้นหา
             </button>
-          </form>
+          </form>{" "}
         </header>
+        {/* Search Results Info */}
+        {search && !loading && (
+          <div className="text-center mb-4">
+            <p className="text-[var(--primary)] text-sm">
+              {posts.length > 0
+                ? `พบ ${posts.length} โพสต์สำหรับ "${search}"`
+                : `ไม่พบโพสต์สำหรับ "${search}"`}
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="ml-2 text-[var(--button)] hover:underline text-sm"
+                >
+                  แสดงทั้งหมด
+                </button>
+              )}
+            </p>
+          </div>
+        )}
         {/* Scatter Board */}
         <main
           className="relative flex-1 mx-auto w-full max-w-[1200px] min-h-[900px] bg-transparent"
