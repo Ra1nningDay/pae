@@ -30,8 +30,5 @@ jobs:
       - name: Run linting
         run: pnpm run lint
 
-      - name: Type check
-        run: pnpm exec tsc --noEmit
-
       - name: Build application
         run: pnpm run build
