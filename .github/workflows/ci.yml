@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [master]
+    branches: [master, dev, feat]
   push:
-    branches: [master]
+    branches: [master, dev, feat]
 
 jobs:
   test:
@@ -29,6 +29,9 @@ jobs:
 
       - name: Run linting
         run: pnpm run lint
+
+      - name: Type check
+        run: pnpm exec tsc --noEmit
 
       - name: Build application
         run: pnpm run build
