@@ -1,5 +1,25 @@
 import React from "react";
 
+// Helper function to calculate time remaining
+function getTimeRemaining(expiresAt: string): string {
+  const now = new Date();
+  const expiration = new Date(expiresAt);
+  const timeLeft = expiration.getTime() - now.getTime();
+
+  if (timeLeft <= 0) {
+    return "หมดอายุแล้ว";
+  }
+
+  const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+  if (hours > 0) {
+    return `อีก ${hours} ชม. ${minutes} นาที`;
+  } else {
+    return `อีก ${minutes} นาที`;
+  }
+}
+
 export type Post = {
   id: string;
   title: string;
@@ -7,6 +27,7 @@ export type Post = {
   contactInfo?: string | null;
   authorName: string;
   author_ipaddress?: string;
+  expiresAt?: string | null; // วันที่หมดอายุ
   tags: { id: number; name: string }[];
   createdAt: string;
 };
@@ -32,10 +53,15 @@ export default function PostCard({
       <div className="flex items-center justify-between mb-1">
         <h2 className="text-lg font-bold text-[var(--primary)] break-words">
           {post.title}
-        </h2>
-        <span className="text-xs text-[var(--accent)]">
-          {new Date(post.createdAt).toLocaleString()}
-        </span>
+        </h2>{" "}
+        <div className="text-xs text-[var(--accent)] text-right">
+          <div>{new Date(post.createdAt).toLocaleString()}</div>
+          {/* {post.expiresAt && (
+            <div className="text-[var(--muted)] opacity-70">
+              {getTimeRemaining(post.expiresAt)}
+            </div>
+          )} */}
+        </div>
       </div>
       <div className="text-sm mb-2 whitespace-pre-line">{post.content}</div>
       {post.contactInfo && (
@@ -61,6 +87,11 @@ export default function PostCard({
           </span>
         )}
       </div>
+      {/* {post.expiresAt && (
+        <div className="text-xs text-[var(--accent)] mt-2">
+          {getTimeRemaining(post.expiresAt)}
+        </div>
+      )} */}
     </div>
   );
 }
