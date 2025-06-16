@@ -11,13 +11,6 @@
   --button: #ff654f; /* coral */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 /* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -33,4 +26,216 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Cyberpunk Background Styles */
+.cyberpunk-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cyberpunk-line {
+  position: absolute;
+  opacity: 0.7;
+}
+
+/* Horizontal Lines */
+.cyberpunk-line-horizontal {
+  width: 100%;
+  height: 2px;
+  opacity: 0.7;
+}
+
+.cyberpunk-horizontal-0 {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #ff0080 30%,
+    #ffff00 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px #ff0080;
+  animation: slideHorizontal0 ease-in-out infinite;
+}
+
+.cyberpunk-horizontal-1 {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #00ff80 30%,
+    #ff0080 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px #00ff80;
+  animation: slideHorizontal1 ease-in-out infinite;
+}
+
+.cyberpunk-horizontal-2 {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #0080ff 30%,
+    #00ff80 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px #0080ff;
+  animation: slideHorizontal2 ease-in-out infinite;
+}
+
+/* Vertical Lines */
+.cyberpunk-line-vertical {
+  height: 100%;
+  width: 2px;
+  opacity: 0.6;
+}
+
+.cyberpunk-vertical-0 {
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    #00ff80 30%,
+    #ffff00 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px #00ff80;
+  animation: slideVertical0 ease-in-out infinite;
+}
+
+.cyberpunk-vertical-1 {
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    #0080ff 30%,
+    #ff0080 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px #0080ff;
+  animation: slideVertical1 ease-in-out infinite;
+}
+
+.cyberpunk-vertical-2 {
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    #ff0080 30%,
+    #00ff80 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px #ff0080;
+  animation: slideVertical2 ease-in-out infinite;
+}
+
+/* Diagonal Lines */
+.cyberpunk-line-diagonal {
+  width: 100%;
+  height: 2px;
+  opacity: 0.5;
+  transform-origin: left;
+}
+
+.cyberpunk-diagonal-0 {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #ffff00 40%,
+    #0080ff 60%,
+    transparent 100%
+  );
+  box-shadow: 0 0 15px #ffff00;
+  animation: rotateLine0 ease-in-out infinite;
+}
+
+.cyberpunk-diagonal-1 {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #ff0080 40%,
+    #00ff80 60%,
+    transparent 100%
+  );
+  box-shadow: 0 0 15px #ff0080;
+  animation: rotateLine1 ease-in-out infinite;
+}
+
+/* Cyberpunk Animations */
+@keyframes slideHorizontal0 {
+  0%,
+  100% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slideHorizontal1 {
+  0%,
+  100% {
+    transform: translateX(100%);
+  }
+  50% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slideHorizontal2 {
+  0%,
+  100% {
+    transform: translateX(-50%);
+  }
+  50% {
+    transform: translateX(150%);
+  }
+}
+
+@keyframes slideVertical0 {
+  0%,
+  100% {
+    transform: translateY(-100%);
+  }
+  50% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes slideVertical1 {
+  0%,
+  100% {
+    transform: translateY(100%);
+  }
+  50% {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes slideVertical2 {
+  0%,
+  100% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(150%);
+  }
+}
+
+@keyframes rotateLine0 {
+  0%,
+  100% {
+    transform: rotate(15deg) translateX(-50%);
+  }
+  50% {
+    transform: rotate(45deg) translateX(50%);
+  }
+}
+
+@keyframes rotateLine1 {
+  0%,
+  100% {
+    transform: rotate(-15deg) translateX(50%);
+  }
+  50% {
+    transform: rotate(-45deg) translateX(-50%);
+  }
 }

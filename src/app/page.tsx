@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import PostCard, { Post } from "../components/PostCard";
 import PostForm from "../components/PostForm";
+import CyberpunkBackground from "../components/CyberpunkBackground";
+import CyberpunkWatermark from "../components/CyberpunkWatermark";
 import { useRouter } from "next/navigation";
 
 // Constants for board and card dimensions
@@ -88,170 +90,11 @@ export default function Home() {
         background: "#0a0a0a",
       }}
     >
-      {/* Animated Neon Lines Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Horizontal Lines */}
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div
-            key={`h-${i}`}
-            className="absolute w-full h-0.5"
-            style={{
-              top: `${(i + 1) * 8.33}%`,
-              background: `linear-gradient(90deg, 
-                transparent 0%, 
-                ${
-                  i % 3 === 0 ? "#ff0080" : i % 3 === 1 ? "#00ff80" : "#0080ff"
-                } 30%, 
-                ${
-                  i % 3 === 0 ? "#ffff00" : i % 3 === 1 ? "#ff0080" : "#00ff80"
-                } 70%, 
-                transparent 100%)`,
-              boxShadow: `0 0 20px ${
-                i % 3 === 0 ? "#ff0080" : i % 3 === 1 ? "#00ff80" : "#0080ff"
-              }`,
-              animation: `slideHorizontal${i % 3} ${
-                3 + i * 0.2
-              }s ease-in-out infinite`,
-              opacity: 0.7,
-            }}
-          />
-        ))}
-
-        {/* Vertical Lines */}
-        {Array.from({ length: 10 }).map((_, i) => (
-          <div
-            key={`v-${i}`}
-            className="absolute h-full w-0.5"
-            style={{
-              left: `${(i + 1) * 10}%`,
-              background: `linear-gradient(0deg, 
-                transparent 0%, 
-                ${
-                  i % 3 === 0 ? "#00ff80" : i % 3 === 1 ? "#0080ff" : "#ff0080"
-                } 30%, 
-                ${
-                  i % 3 === 0 ? "#ffff00" : i % 3 === 1 ? "#ff0080" : "#00ff80"
-                } 70%, 
-                transparent 100%)`,
-              boxShadow: `0 0 20px ${
-                i % 3 === 0 ? "#00ff80" : i % 3 === 1 ? "#0080ff" : "#ff0080"
-              }`,
-              animation: `slideVertical${i % 3} ${
-                4 + i * 0.3
-              }s ease-in-out infinite`,
-              opacity: 0.6,
-            }}
-          />
-        ))}
-
-        {/* Diagonal Lines */}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={`d-${i}`}
-            className="absolute w-full h-0.5 origin-left"
-            style={{
-              top: `${(i + 1) * 12.5}%`,
-              background: `linear-gradient(90deg, 
-                transparent 0%, 
-                ${i % 2 === 0 ? "#ffff00" : "#ff0080"} 40%, 
-                ${i % 2 === 0 ? "#0080ff" : "#00ff80"} 60%, 
-                transparent 100%)`,
-              boxShadow: `0 0 15px ${i % 2 === 0 ? "#ffff00" : "#ff0080"}`,
-              transform: `rotate(${i % 2 === 0 ? "15deg" : "-15deg"})`,
-              animation: `rotateLine${i % 2} ${
-                5 + i * 0.4
-              }s ease-in-out infinite`,
-              opacity: 0.5,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Animated CSS Styles */}
-      <style jsx>{`
-        @keyframes slideHorizontal0 {
-          0%,
-          100% {
-            transform: translateX(-100%);
-          }
-          50% {
-            transform: translateX(100%);
-          }
-        }
-        @keyframes slideHorizontal1 {
-          0%,
-          100% {
-            transform: translateX(100%);
-          }
-          50% {
-            transform: translateX(-100%);
-          }
-        }
-        @keyframes slideHorizontal2 {
-          0%,
-          100% {
-            transform: translateX(-50%);
-          }
-          50% {
-            transform: translateX(150%);
-          }
-        }
-
-        @keyframes slideVertical0 {
-          0%,
-          100% {
-            transform: translateY(-100%);
-          }
-          50% {
-            transform: translateY(100%);
-          }
-        }
-        @keyframes slideVertical1 {
-          0%,
-          100% {
-            transform: translateY(100%);
-          }
-          50% {
-            transform: translateY(-100%);
-          }
-        }
-        @keyframes slideVertical2 {
-          0%,
-          100% {
-            transform: translateY(-50%);
-          }
-          50% {
-            transform: translateY(150%);
-          }
-        }
-
-        @keyframes rotateLine0 {
-          0%,
-          100% {
-            transform: rotate(15deg) translateX(-50%);
-          }
-          50% {
-            transform: rotate(45deg) translateX(50%);
-          }
-        }
-        @keyframes rotateLine1 {
-          0%,
-          100% {
-            transform: rotate(-15deg) translateX(50%);
-          }
-          50% {
-            transform: rotate(-45deg) translateX(-50%);
-          }
-        }
-      `}</style>
-
-      {/* Dark overlay for content readability */}
+      {/* Cyberpunk Animated Background */}
+      <CyberpunkBackground /> {/* Dark overlay for content readability */}
       <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" />
-
       {/* Watermark "แปะ!" */}
-      <h1 className="absolute top-16 left-1/2 -translate-x-1/2 text-[10vw] font-extrabold text-white opacity-20 select-none pointer-events-none z-10 whitespace-nowrap drop-shadow-2xl">
-        แปะ!
-      </h1>
+      <CyberpunkWatermark />
       {/* Content */}
       <div className="relative z-20">
         {" "}
