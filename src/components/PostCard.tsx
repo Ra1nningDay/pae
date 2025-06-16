@@ -6,6 +6,7 @@ export type Post = {
   content: string;
   contactInfo?: string | null;
   authorName: string;
+  author_ipaddress?: string;
   tags: { id: number; name: string }[];
   createdAt: string;
 };
@@ -14,10 +15,12 @@ export default function PostCard({
   post,
   style,
   className,
+  showIpAddress = false,
 }: {
   post: Post;
   style?: React.CSSProperties;
   className?: string;
+  showIpAddress?: boolean;
 }) {
   return (
     <div
@@ -49,9 +52,14 @@ export default function PostCard({
             #{tag.name}
           </span>
         ))}
-      </div>
+      </div>{" "}
       <div className="text-xs text-[var(--accent)] mt-2">
         By {post.authorName}
+        {showIpAddress && post.author_ipaddress && (
+          <span className="ml-2 text-[var(--muted)] opacity-70">
+            ({post.author_ipaddress})
+          </span>
+        )}
       </div>
     </div>
   );
