@@ -81,21 +81,179 @@ export default function Home() {
     }
     return positions;
   }, [posts]);
-
   return (
     <div
       className="min-h-screen w-full relative overflow-hidden"
       style={{
-        background:
-          "linear-gradient(135deg, #2d1a60 0%, #3a1c71 50%, #d76d77 100%)",
+        background: "#0a0a0a",
       }}
     >
+      {/* Animated Neon Lines Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Horizontal Lines */}
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div
+            key={`h-${i}`}
+            className="absolute w-full h-0.5"
+            style={{
+              top: `${(i + 1) * 8.33}%`,
+              background: `linear-gradient(90deg, 
+                transparent 0%, 
+                ${
+                  i % 3 === 0 ? "#ff0080" : i % 3 === 1 ? "#00ff80" : "#0080ff"
+                } 30%, 
+                ${
+                  i % 3 === 0 ? "#ffff00" : i % 3 === 1 ? "#ff0080" : "#00ff80"
+                } 70%, 
+                transparent 100%)`,
+              boxShadow: `0 0 20px ${
+                i % 3 === 0 ? "#ff0080" : i % 3 === 1 ? "#00ff80" : "#0080ff"
+              }`,
+              animation: `slideHorizontal${i % 3} ${
+                3 + i * 0.2
+              }s ease-in-out infinite`,
+              opacity: 0.7,
+            }}
+          />
+        ))}
+
+        {/* Vertical Lines */}
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div
+            key={`v-${i}`}
+            className="absolute h-full w-0.5"
+            style={{
+              left: `${(i + 1) * 10}%`,
+              background: `linear-gradient(0deg, 
+                transparent 0%, 
+                ${
+                  i % 3 === 0 ? "#00ff80" : i % 3 === 1 ? "#0080ff" : "#ff0080"
+                } 30%, 
+                ${
+                  i % 3 === 0 ? "#ffff00" : i % 3 === 1 ? "#ff0080" : "#00ff80"
+                } 70%, 
+                transparent 100%)`,
+              boxShadow: `0 0 20px ${
+                i % 3 === 0 ? "#00ff80" : i % 3 === 1 ? "#0080ff" : "#ff0080"
+              }`,
+              animation: `slideVertical${i % 3} ${
+                4 + i * 0.3
+              }s ease-in-out infinite`,
+              opacity: 0.6,
+            }}
+          />
+        ))}
+
+        {/* Diagonal Lines */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={`d-${i}`}
+            className="absolute w-full h-0.5 origin-left"
+            style={{
+              top: `${(i + 1) * 12.5}%`,
+              background: `linear-gradient(90deg, 
+                transparent 0%, 
+                ${i % 2 === 0 ? "#ffff00" : "#ff0080"} 40%, 
+                ${i % 2 === 0 ? "#0080ff" : "#00ff80"} 60%, 
+                transparent 100%)`,
+              boxShadow: `0 0 15px ${i % 2 === 0 ? "#ffff00" : "#ff0080"}`,
+              transform: `rotate(${i % 2 === 0 ? "15deg" : "-15deg"})`,
+              animation: `rotateLine${i % 2} ${
+                5 + i * 0.4
+              }s ease-in-out infinite`,
+              opacity: 0.5,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Animated CSS Styles */}
+      <style jsx>{`
+        @keyframes slideHorizontal0 {
+          0%,
+          100% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(100%);
+          }
+        }
+        @keyframes slideHorizontal1 {
+          0%,
+          100% {
+            transform: translateX(100%);
+          }
+          50% {
+            transform: translateX(-100%);
+          }
+        }
+        @keyframes slideHorizontal2 {
+          0%,
+          100% {
+            transform: translateX(-50%);
+          }
+          50% {
+            transform: translateX(150%);
+          }
+        }
+
+        @keyframes slideVertical0 {
+          0%,
+          100% {
+            transform: translateY(-100%);
+          }
+          50% {
+            transform: translateY(100%);
+          }
+        }
+        @keyframes slideVertical1 {
+          0%,
+          100% {
+            transform: translateY(100%);
+          }
+          50% {
+            transform: translateY(-100%);
+          }
+        }
+        @keyframes slideVertical2 {
+          0%,
+          100% {
+            transform: translateY(-50%);
+          }
+          50% {
+            transform: translateY(150%);
+          }
+        }
+
+        @keyframes rotateLine0 {
+          0%,
+          100% {
+            transform: rotate(15deg) translateX(-50%);
+          }
+          50% {
+            transform: rotate(45deg) translateX(50%);
+          }
+        }
+        @keyframes rotateLine1 {
+          0%,
+          100% {
+            transform: rotate(-15deg) translateX(50%);
+          }
+          50% {
+            transform: rotate(-45deg) translateX(-50%);
+          }
+        }
+      `}</style>
+
+      {/* Dark overlay for content readability */}
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" />
+
       {/* Watermark "แปะ!" */}
-      <h1 className="absolute top-16 left-1/2 -translate-x-1/2 text-[10vw] font-extrabold text-white opacity-15 select-none pointer-events-none z-0 whitespace-nowrap">
+      <h1 className="absolute top-16 left-1/2 -translate-x-1/2 text-[10vw] font-extrabold text-white opacity-20 select-none pointer-events-none z-10 whitespace-nowrap drop-shadow-2xl">
         แปะ!
       </h1>
       {/* Content */}
-      <div className="relative z-10">
+      <div className="relative z-20">
         {" "}
         {/* Search Bar */}
         <header className="flex justify-center py-8 z-20">
@@ -106,33 +264,33 @@ export default function Home() {
                 placeholder="ค้นหา #tag หรือคำค้นหา"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="border border-[var(--card-border)] rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] w-full text-lg shadow bg-[var(--card)] text-[var(--foreground)]"
+                className="border-2 border-cyan-400/50 rounded-lg px-4 py-3 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(34,211,238,0.5)] w-full text-lg bg-black/70 text-white placeholder-gray-300 backdrop-blur-sm transition-all duration-300"
               />
               {loading && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <div className="animate-spin h-5 w-5 border-2 border-[var(--primary)] border-t-transparent rounded-full"></div>
+                  <div className="animate-spin h-5 w-5 border-2 border-cyan-400 border-t-transparent rounded-full"></div>
                 </div>
               )}
-            </div>
+            </div>{" "}
             <button
               type="submit"
-              className="bg-[var(--button)] text-white rounded px-6 py-3 font-semibold hover:brightness-110 transition-colors shadow text-lg"
+              className="bg-gradient-to-r from-pink-500 to-cyan-500 text-white rounded-lg px-6 py-3 font-semibold hover:from-pink-400 hover:to-cyan-400 transition-all duration-300 shadow-[0_0_20px_rgba(236,72,153,0.5)] hover:shadow-[0_0_30px_rgba(236,72,153,0.7)] text-lg"
             >
               ค้นหา
             </button>
           </form>{" "}
-        </header>
+        </header>{" "}
         {/* Search Results Info */}
         {search && !loading && (
           <div className="text-center mb-4">
-            <p className="text-[var(--primary)] text-sm">
+            <p className="text-cyan-300 text-sm bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 inline-block border border-cyan-400/30">
               {posts.length > 0
                 ? `พบ ${posts.length} โพสต์สำหรับ "${search}"`
                 : `ไม่พบโพสต์สำหรับ "${search}"`}
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="ml-2 text-[var(--button)] hover:underline text-sm"
+                  className="ml-2 text-pink-400 hover:text-pink-300 hover:underline text-sm transition-colors"
                 >
                   แสดงทั้งหมด
                 </button>
@@ -145,13 +303,19 @@ export default function Home() {
           className="relative flex-1 mx-auto w-full max-w-[1200px] min-h-[900px] bg-transparent"
           style={{ minHeight: BOARD_HEIGHT }}
         >
+          {" "}
           {loading ? (
-            <div className="text-[var(--primary)] text-center pt-20">
-              Loading posts...
+            <div className="text-cyan-300 text-center pt-20">
+              <div className="inline-flex items-center gap-3 bg-black/70 backdrop-blur-sm rounded-lg px-6 py-4 border border-cyan-400/30">
+                <div className="animate-spin h-6 w-6 border-2 border-cyan-400 border-t-transparent rounded-full"></div>
+                <span className="text-lg">กำลังโหลดโพสต์...</span>
+              </div>
             </div>
           ) : posts.length === 0 ? (
-            <div className="text-[var(--primary)] text-center pt-20">
-              No posts found.
+            <div className="text-center pt-20">
+              <div className="inline-block bg-black/70 backdrop-blur-sm rounded-lg px-6 py-4 border border-pink-400/30">
+                <span className="text-pink-300 text-lg">ไม่พบโพสต์</span>
+              </div>
             </div>
           ) : (
             posts.map((post, i) => (
@@ -165,37 +329,41 @@ export default function Home() {
                   width: CARD_WIDTH,
                   transform: `rotate(${cardPositions[i]?.rotate}deg) scale(${cardPositions[i]?.scale})`,
                   zIndex: cardPositions[i]?.z,
-                  boxShadow:
-                    "0 8px 32px 0 rgba(255,176,133,0.10), 0 1.5px 8px 0 rgba(113,173,186,0.10)",
-                  background: "var(--card)",
-                  border: "2px solid var(--card-border)",
+                  boxShadow: `
+                    0 0 20px rgba(34, 211, 238, 0.3),
+                    0 0 40px rgba(236, 72, 153, 0.2),
+                    0 8px 32px rgba(0, 0, 0, 0.5)
+                  `,
+                  background: "rgba(0, 0, 0, 0.8)",
+                  border: "1px solid rgba(34, 211, 238, 0.3)",
+                  backdropFilter: "blur(10px)",
                 }}
-                className="transition-transform hover:scale-105 hover:z-50 cursor-pointer duration-200"
+                className="transition-all hover:scale-105 hover:z-50 cursor-pointer duration-300 hover:shadow-[0_0_30px_rgba(34,211,238,0.5),0_0_60px_rgba(236,72,153,0.3)]"
               />
             ))
           )}
-        </main>
+        </main>{" "}
         {/* Floating Action Button */}
         <button
-          className="fixed bottom-8 right-8 bg-[var(--button)] text-white rounded-full shadow-lg w-20 h-20 flex flex-col items-center justify-center text-xl hover:scale-110 transition z-50 font-bold gap-1"
+          className="fixed bottom-8 right-8 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full w-20 h-20 flex flex-col items-center justify-center text-xl hover:scale-110 transition-all duration-300 z-50 font-bold gap-1 shadow-[0_0_20px_rgba(236,72,153,0.6)] hover:shadow-[0_0_30px_rgba(236,72,153,0.8)] border border-pink-400/30"
           onClick={() => setShowModal(true)}
           aria-label="แปะโพสต์"
         >
           <span className="text-3xl leading-none">+</span>
           <span className="text-xs font-semibold">แปะโพสต์</span>
-        </button>
+        </button>{" "}
         {/* Modal for PostForm */}
         {showModal && (
-          <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-            <div className="bg-[var(--card)] rounded-xl shadow-lg p-8 relative w-[420px] max-w-full border border-[var(--card-border)]">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-black/80 backdrop-blur-lg rounded-xl p-8 relative w-[420px] max-w-full border border-cyan-400/30 shadow-[0_0_40px_rgba(34,211,238,0.3)]">
               <button
-                className="absolute top-2 right-2 text-[var(--primary)] hover:text-[var(--button)] text-2xl font-bold"
+                className="absolute top-2 right-2 text-cyan-300 hover:text-pink-400 text-2xl font-bold transition-colors"
                 onClick={() => setShowModal(false)}
                 aria-label="Close"
               >
                 ×
               </button>
-              <h2 className="text-xl font-bold mb-4 text-center text-[var(--primary)]">
+              <h2 className="text-xl font-bold mb-4 text-center text-cyan-300">
                 แปะโพสต์ใหม่
               </h2>
               <PostForm
