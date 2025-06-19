@@ -269,7 +269,7 @@ export default function Home() {
           className={`relative flex-1 mx-auto w-full bg-transparent ${
             isMobile
               ? "overflow-y-auto max-w-full" // Allow scrolling on mobile
-              : "overflow-hidden max-w-[1600px] min-h-[1200px]"
+              : "overflow-hidden min-h-[1200px]"
           }`}
           style={{
             minHeight: isMobile
