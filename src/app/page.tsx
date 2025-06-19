@@ -6,9 +6,29 @@ import CyberpunkBackground from "../components/CyberpunkBackground";
 import CyberpunkWatermark from "../components/CyberpunkWatermark";
 import { useRouter } from "next/navigation";
 
+// Helper function to calculate time remaining
+function getTimeRemaining(expiresAt: string): string {
+  const now = new Date();
+  const expiration = new Date(expiresAt);
+  const timeLeft = expiration.getTime() - now.getTime();
+
+  if (timeLeft <= 0) {
+    return "หมดอายุแล้ว";
+  }
+
+  const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+  if (hours > 0) {
+    return `อีก ${hours} ชม. ${minutes} นาที`;
+  } else {
+    return `อีก ${minutes} นาที`;
+  }
+}
+
 // Constants for board and card dimensions
-const BOARD_WIDTH = 1200;
-const BOARD_HEIGHT = 900;
+const BOARD_WIDTH = 1600; // เพิ่มจาก 1200
+const BOARD_HEIGHT = 1200; // เพิ่มจาก 900
 const CARD_WIDTH = 340;
 const CARD_HEIGHT = 210;
 
@@ -16,6 +36,7 @@ export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -71,14 +92,80 @@ export default function Home() {
       z: number;
       scale: number;
     }[] = [];
-    const margin = 80;
+
+    const centerX = BOARD_WIDTH / 2;
+    const centerY = BOARD_HEIGHT / 2;
+    const margin = 40;
+    const minDistance = 120;
+    const avoidCenterRadius = 300; // รัศมีที่หลีกเลี่ยงตรงกลาง
+
     for (let i = 0; i < posts.length; i++) {
-      const left = Math.random() * (BOARD_WIDTH - CARD_WIDTH - margin) + margin;
-      const top =
-        Math.random() * (BOARD_HEIGHT - CARD_HEIGHT - margin) + margin;
-      const rotate = Math.random() * 18 - 9; // -9 ถึง +9 องศา
-      const z = Math.floor(Math.random() * 20) + 10;
-      const scale = 0.96 + Math.random() * 0.08; // 0.96 - 1.04
+      let left: number, top: number;
+      let attempts = 0;
+      const maxAttempts = 100;
+
+      do {
+        // สร้างการกระจายแบบ spiral หรือ cluster
+        if (i < 4) {
+          // การ์ด 4 ใบแรกวางที่มุม 4 มุม
+          const corners = [
+            { x: margin, y: margin },
+            { x: BOARD_WIDTH - CARD_WIDTH - margin, y: margin },
+            { x: margin, y: BOARD_HEIGHT - CARD_HEIGHT - margin },
+            {
+              x: BOARD_WIDTH - CARD_WIDTH - margin,
+              y: BOARD_HEIGHT - CARD_HEIGHT - margin,
+            },
+          ];
+          const corner = corners[i];
+          left = corner.x + (Math.random() - 0.5) * 100;
+          top = corner.y + (Math.random() - 0.5) * 100;
+        } else {
+          // การ์ดที่เหลือกระจายแบบ spiral รอบ ๆ
+          const angle = i * 137.5 * (Math.PI / 180); // Golden angle
+          const radius = avoidCenterRadius + i * 15; // เพิ่มรัศมีทีละน้อย
+
+          left = centerX + Math.cos(angle) * radius - CARD_WIDTH / 2;
+          top = centerY + Math.sin(angle) * radius - CARD_HEIGHT / 2;
+
+          // เพิ่ม randomness
+          left += (Math.random() - 0.5) * 80;
+          top += (Math.random() - 0.5) * 80;
+        }
+
+        // ตรวจสอบขอบเขต
+        left = Math.max(
+          margin,
+          Math.min(BOARD_WIDTH - CARD_WIDTH - margin, left)
+        );
+        top = Math.max(
+          margin,
+          Math.min(BOARD_HEIGHT - CARD_HEIGHT - margin, top)
+        );
+
+        // ตรวจสอบระยะห่างจากการ์ดอื่น ๆ
+        const tooClose = positions.some((pos) => {
+          const distance = Math.sqrt(
+            Math.pow(left - pos.left, 2) + Math.pow(top - pos.top, 2)
+          );
+          return distance < minDistance;
+        });
+
+        // ตรวจสอบว่าไม่อยู่ตรงกลางมาก
+        const distanceFromCenter = Math.sqrt(
+          Math.pow(left + CARD_WIDTH / 2 - centerX, 2) +
+            Math.pow(top + CARD_HEIGHT / 2 - centerY, 2)
+        );
+        const tooCloseToCenter =
+          distanceFromCenter < avoidCenterRadius && i >= 4;
+
+        if ((!tooClose && !tooCloseToCenter) || attempts >= maxAttempts) break;
+        attempts++;
+      } while (attempts < maxAttempts);
+
+      const rotate = Math.random() * 30 - 15; // -15 ถึง +15 องศา
+      const z = Math.floor(Math.random() * 30) + 10;
+      const scale = 0.92 + Math.random() * 0.16; // 0.92 - 1.08
       positions.push({ left, top, rotate, z, scale });
     }
     return positions;
@@ -140,10 +227,10 @@ export default function Home() {
               )}
             </p>
           </div>
-        )}
+        )}{" "}
         {/* Scatter Board */}
         <main
-          className="relative flex-1 mx-auto w-full max-w-[1200px] min-h-[900px] bg-transparent"
+          className="relative flex-1 mx-auto w-full max-w-[1600px] min-h-[1200px] bg-transparent overflow-hidden"
           style={{ minHeight: BOARD_HEIGHT }}
         >
           {" "}
@@ -165,6 +252,7 @@ export default function Home() {
               <PostCard
                 key={post.id}
                 post={post}
+                onClick={() => setSelectedPost(post)}
                 style={{
                   position: "absolute",
                   left: cardPositions[i]?.left,
@@ -181,7 +269,7 @@ export default function Home() {
                   border: "1px solid rgba(34, 211, 238, 0.3)",
                   backdropFilter: "blur(10px)",
                 }}
-                className="transition-all hover:scale-105 hover:z-50 cursor-pointer duration-300 hover:shadow-[0_0_30px_rgba(34,211,238,0.5),0_0_60px_rgba(236,72,153,0.3)]"
+                className="card-hover cursor-pointer hover:border-pink-400/50"
               />
             ))
           )}
@@ -195,6 +283,85 @@ export default function Home() {
           <span className="text-3xl leading-none">+</span>
           <span className="text-xs font-semibold">แปะโพสต์</span>
         </button>{" "}
+        {/* Modal for Post Details */}
+        {selectedPost && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
+            <div className="bg-black/90 backdrop-blur-lg rounded-xl p-8 relative w-[600px] max-w-full max-h-[90vh] overflow-y-auto border border-cyan-400/30 shadow-[0_0_50px_rgba(34,211,238,0.4)]">
+              <button
+                className="absolute top-4 right-4 text-cyan-300 hover:text-pink-400 text-3xl font-bold transition-colors z-10"
+                onClick={() => setSelectedPost(null)}
+                aria-label="Close"
+              >
+                ×
+              </button>
+
+              <div className="space-y-6">
+                {/* Header */}
+                <div className="border-b border-cyan-400/30 pb-4">
+                  <h2 className="text-2xl font-bold text-cyan-300 mb-2">
+                    {selectedPost.title}
+                  </h2>
+                  <p className="text-pink-300 text-sm">
+                    โดย {selectedPost.authorName} •{" "}
+                    {new Date(selectedPost.createdAt).toLocaleDateString(
+                      "th-TH"
+                    )}
+                  </p>
+                  {selectedPost.expiresAt && (
+                    <p className="text-yellow-400 text-sm mt-1">
+                      ⏰ {getTimeRemaining(selectedPost.expiresAt)}
+                    </p>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="text-white leading-relaxed">
+                  <h3 className="text-lg font-semibold text-cyan-300 mb-3">
+                    เนื้อหา:
+                  </h3>
+                  <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
+                    <p className="whitespace-pre-wrap">
+                      {selectedPost.content}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Contact Info */}
+                {selectedPost.contactInfo && (
+                  <div className="text-white">
+                    <h3 className="text-lg font-semibold text-cyan-300 mb-3">
+                      ข้อมูลติดต่อ:
+                    </h3>
+                    <div className="bg-pink-900/30 rounded-lg p-4 border border-pink-500/30">
+                      <p className="text-pink-200">
+                        {selectedPost.contactInfo}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tags */}
+                {selectedPost.tags && selectedPost.tags.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-cyan-300 mb-3">
+                      แท็ก:
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedPost.tags.map((tag) => (
+                        <span
+                          key={tag.id}
+                          className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-200 border border-purple-500/30 rounded-full text-sm"
+                        >
+                          #{tag.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
         {/* Modal for PostForm */}
         {showModal && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">

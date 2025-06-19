@@ -37,14 +37,17 @@ export default function PostCard({
   style,
   className,
   showIpAddress = false,
+  onClick,
 }: {
   post: Post;
   style?: React.CSSProperties;
   className?: string;
   showIpAddress?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <div
+      onClick={onClick}
       className={`bg-[var(--card)] border-2 border-[var(--card-border)] rounded-xl shadow-md p-6 flex flex-col gap-2 w-full max-w-xl text-[var(--foreground)] ${
         className || ""
       }`}

@@ -239,3 +239,34 @@ body {
     transform: rotate(-45deg) translateX(-50%);
   }
 }
+
+/* Enhanced Card Hover Effects */
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: rotate(0deg) scale(1.1) !important;
+  z-index: 100 !important;
+  filter: brightness(1.1);
+}
+
+.card-hover:hover::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #ff0080, #00ff80, #0080ff, #ffff00);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.3;
+  animation: borderGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes borderGlow {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
