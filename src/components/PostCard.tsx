@@ -38,63 +38,155 @@ export default function PostCard({
   className,
   showIpAddress = false,
   onClick,
+  patternIndex = 0,
 }: {
   post: Post;
   style?: React.CSSProperties;
   className?: string;
   showIpAddress?: boolean;
   onClick?: () => void;
+  patternIndex?: number;
 }) {
+  // Post-it styles patterns with CyberPunk 2077 Palette colors
+  const getPostItStyle = (index: number) => {
+    const patterns = [
+      // Pattern 1: Blood Red (#710000)
+      {
+        borderRadius: "8px",
+        transform: "rotate(0deg)",
+        clipPath: "none",
+        borderWidth: "2px",
+        borderColor: "#710000", // Blood red
+        backgroundColor: "#ffffff", // White background
+        boxShadow:
+          "0 0 20px rgba(113, 0, 0, 0.4), inset 0 0 20px rgba(113, 0, 0, 0.1)",
+      },
+      // Pattern 2: Electric Yellow (#FDF500) - Top-right folded corner
+      {
+        borderRadius: "8px 0px 8px 8px",
+        transform: "rotate(0deg)",
+        clipPath: "polygon(0% 0%, 90% 0%, 100% 10%, 100% 100%, 0% 100%)",
+        borderWidth: "2px",
+        borderColor: "#FDF500", // Electric yellow
+        backgroundColor: "#ffffff", // White background
+        boxShadow:
+          "0 0 20px rgba(253, 245, 0, 0.4), inset 0 0 20px rgba(253, 245, 0, 0.1)",
+      },
+      // Pattern 3: Electric Blue (#37EBF3) - Bottom-left folded corner
+      {
+        borderRadius: "8px 8px 0px 8px",
+        transform: "rotate(0deg)",
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 10% 100%, 0% 90%)",
+        borderWidth: "2px",
+        borderColor: "#37EBF3", // Electric blue
+        backgroundColor: "#ffffff", // White background
+        boxShadow:
+          "0 0 20px rgba(55, 235, 243, 0.4), inset 0 0 20px rgba(55, 235, 243, 0.1)",
+      },
+      // Pattern 4: Magenta Pink (#E456AE)
+      {
+        borderRadius: "8px",
+        transform: "rotate(0deg)",
+        clipPath: "none",
+        borderWidth: "2px",
+        borderColor: "#E456AE", // Magenta pink
+        backgroundColor: "#ffffff", // White background
+        boxShadow:
+          "0 0 20px rgba(228, 86, 174, 0.4), inset 0 0 20px rgba(228, 86, 174, 0.1)",
+      },
+    ];
+    return patterns[index % 4];
+  };
+
+  const postItStyle = getPostItStyle(patternIndex);
   return (
     <div
       onClick={onClick}
-      className={`bg-[var(--card)] border-2 border-[var(--card-border)] rounded-xl shadow-md p-6 flex flex-col gap-2 w-full max-w-xl text-[var(--foreground)] ${
+      className={`card-hover border-2 rounded-xl shadow-md flex flex-col gap-2 w-full max-w-xl transition-all duration-300 ${
         className || ""
       }`}
-      style={{ ...style, margin: 8 }}
+      style={{
+        ...style,
+        margin: 8,
+        padding: "16px", // Responsive padding
+        backgroundColor: postItStyle.backgroundColor,
+        borderRadius: postItStyle.borderRadius,
+        transform: `${style?.transform || ""} ${postItStyle.transform}`,
+        clipPath: postItStyle.clipPath,
+        borderWidth: postItStyle.borderWidth,
+        borderColor: postItStyle.borderColor,
+        boxShadow: postItStyle.boxShadow,
+        backdropFilter: "blur(10px)",
+        minHeight: "160px", // Ensure consistent card height
+        maxWidth: style?.width || "280px", // Responsive width
+      }}
     >
-      <div className="flex items-center justify-between mb-1">
-        <h2 className="text-lg font-bold text-[var(--primary)] break-words">
+      {" "}
+      <div className="flex items-start justify-between mb-2">
+        <h2
+          className="text-base md:text-lg font-bold break-words flex-1 mr-2"
+          style={{ color: "#333333", lineHeight: "1.3" }}
+        >
           {post.title}
         </h2>{" "}
-        <div className="text-xs text-[var(--accent)] text-right">
-          <div>{new Date(post.createdAt).toLocaleString()}</div>
-          {/* {post.expiresAt && (
-            <div className="text-[var(--muted)] opacity-70">
-              {getTimeRemaining(post.expiresAt)}
-            </div>
-          )} */}
+        <div
+          className="text-xs text-right flex-shrink-0"
+          style={{ color: "#666666" }}
+        >
+          <div>{new Date(post.createdAt).toLocaleDateString("th-TH")}</div>
         </div>
-      </div>
-      <div className="text-sm mb-2 whitespace-pre-line">{post.content}</div>
-      {post.contactInfo && (
-        <div className="text-xs text-[var(--accent)] mb-2">
-          Contact: {post.contactInfo}
-        </div>
-      )}
-      <div className="flex flex-wrap gap-2 mt-2">
-        {post.tags.map((tag) => (
-          <span
-            key={tag.id}
-            className="bg-[var(--primary)]/20 text-[var(--primary)] px-2 py-0.5 rounded-full text-xs font-mono"
-          >
-            #{tag.name}
-          </span>
-        ))}
       </div>{" "}
-      <div className="text-xs text-[var(--accent)] mt-2">
-        By {post.authorName}
-        {showIpAddress && post.author_ipaddress && (
-          <span className="ml-2 text-[var(--muted)] opacity-70">
-            ({post.author_ipaddress})
+      <div
+        className="text-xs md:text-sm mb-2 whitespace-pre-line leading-relaxed flex-1"
+        style={{ color: "#444444" }}
+      >
+        {post.content.length > 100
+          ? `${post.content.substring(0, 100)}...`
+          : post.content}
+      </div>
+      {/* Tags */}
+      <div className="flex flex-wrap gap-1 mt-auto">
+        {post.tags.slice(0, 3).map(
+          (
+            tag // Limit tags for mobile
+          ) => (
+            <span
+              key={tag.id}
+              className="px-2 py-1 rounded-full text-xs font-medium border"
+              style={{
+                backgroundColor: "rgba(0, 0, 0, 0.05)",
+                color: "#555555",
+                borderColor: "rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              #{tag.name}
+            </span>
+          )
+        )}
+        {post.tags.length > 3 && (
+          <span
+            className="px-2 py-1 rounded-full text-xs font-medium"
+            style={{ color: "#888888" }}
+          >
+            +{post.tags.length - 3}
           </span>
         )}
       </div>
-      {/* {post.expiresAt && (
-        <div className="text-xs text-[var(--accent)] mt-2">
-          {getTimeRemaining(post.expiresAt)}
-        </div>
-      )} */}
+      {/* Author */}
+      <div
+        className="text-xs mt-2 pt-2 flex-shrink-0"
+        style={{
+          color: "#777777",
+          borderTop: "1px solid rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        👤 {post.authorName}
+        {showIpAddress && post.author_ipaddress && (
+          <span className="ml-2 opacity-70" style={{ color: "#999999" }}>
+            ({post.author_ipaddress})
+          </span>
+        )}{" "}
+      </div>
     </div>
   );
 }

@@ -2,13 +2,14 @@
 
 :root {
   --background: #fff6ed; /* soft cream */
-  --foreground: #2d1a0b; /* deep brown */
-  --primary: #ffb085; /* peach fuzz */
-  --secondary: #ffe066; /* soft yellow */
-  --accent: #71adba; /* retro blue */
-  --card: #fffaf3; /* lightest cream */
-  --card-border: #ffe0c2; /* light peach border */
-  --button: #ff654f; /* coral */
+  --foreground: #1a1a1a; /* dark text for readability */
+  --primary: #2563eb; /* blue - professional and readable */
+  --secondary: #059669; /* green - good for success/tags */
+  --accent: #6b7280; /* gray - for meta info */
+  --card: #ffffff; /* pure white background */
+  --card-border: #e5e7eb; /* light gray border */
+  --button: #3b82f6; /* blue button */
+  --muted: #9ca3af; /* muted gray for less important text */
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -52,11 +53,11 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    #ff0080 30%,
-    #ffff00 70%,
+    #710000 30%,
+    #fdf500 70%,
     transparent 100%
   );
-  box-shadow: 0 0 20px #ff0080;
+  box-shadow: 0 0 20px #710000;
   animation: slideHorizontal0 ease-in-out infinite;
 }
 
@@ -64,11 +65,11 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    #00ff80 30%,
-    #ff0080 70%,
+    #37ebf3 30%,
+    #e456ae 70%,
     transparent 100%
   );
-  box-shadow: 0 0 20px #00ff80;
+  box-shadow: 0 0 20px #37ebf3;
   animation: slideHorizontal1 ease-in-out infinite;
 }
 
@@ -76,11 +77,11 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    #0080ff 30%,
-    #00ff80 70%,
+    #9370db 30%,
+    #cb1dcd 70%,
     transparent 100%
   );
-  box-shadow: 0 0 20px #0080ff;
+  box-shadow: 0 0 20px #9370db;
   animation: slideHorizontal2 ease-in-out infinite;
 }
 
@@ -95,11 +96,11 @@ body {
   background: linear-gradient(
     0deg,
     transparent 0%,
-    #00ff80 30%,
-    #ffff00 70%,
+    #37ebf3 30%,
+    #fdf500 70%,
     transparent 100%
   );
-  box-shadow: 0 0 20px #00ff80;
+  box-shadow: 0 0 20px #37ebf3;
   animation: slideVertical0 ease-in-out infinite;
 }
 
@@ -107,11 +108,11 @@ body {
   background: linear-gradient(
     0deg,
     transparent 0%,
-    #0080ff 30%,
-    #ff0080 70%,
+    #9370db 30%,
+    #e456ae 70%,
     transparent 100%
   );
-  box-shadow: 0 0 20px #0080ff;
+  box-shadow: 0 0 20px #9370db;
   animation: slideVertical1 ease-in-out infinite;
 }
 
@@ -119,11 +120,11 @@ body {
   background: linear-gradient(
     0deg,
     transparent 0%,
-    #ff0080 30%,
-    #00ff80 70%,
+    #710000 30%,
+    #cb1dcd 70%,
     transparent 100%
   );
-  box-shadow: 0 0 20px #ff0080;
+  box-shadow: 0 0 20px #710000;
   animation: slideVertical2 ease-in-out infinite;
 }
 
@@ -139,11 +140,11 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    #ffff00 40%,
-    #0080ff 60%,
+    #fdf500 40%,
+    #37ebf3 60%,
     transparent 100%
   );
-  box-shadow: 0 0 15px #ffff00;
+  box-shadow: 0 0 15px #fdf500;
   animation: rotateLine0 ease-in-out infinite;
 }
 
@@ -151,11 +152,11 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    #ff0080 40%,
-    #00ff80 60%,
+    #e456ae 40%,
+    #9370db 60%,
     transparent 100%
   );
-  box-shadow: 0 0 15px #ff0080;
+  box-shadow: 0 0 15px #e456ae;
   animation: rotateLine1 ease-in-out infinite;
 }
 
@@ -240,33 +241,56 @@ body {
   }
 }
 
-/* Enhanced Card Hover Effects */
+/* Simple Card Hover Effects - Clean and minimal */
 .card-hover {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
+  transform-origin: center;
 }
 
 .card-hover:hover {
-  transform: rotate(0deg) scale(1.1) !important;
-  z-index: 100 !important;
-  filter: brightness(1.1);
+  transform: scale(1.05) !important;
+  box-shadow: 0 8px 25px rgba(228, 86, 174, 0.25),
+    0 4px 15px rgba(55, 235, 243, 0.15) !important;
+  border-color: #e456ae !important;
+  z-index: 1000 !important;
 }
 
-.card-hover:hover::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(45deg, #ff0080, #00ff80, #0080ff, #ffff00);
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0.3;
-  animation: borderGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes borderGlow {
-  0% {
-    filter: hue-rotate(0deg);
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .cyberpunk-background {
+    opacity: 0.25; /* ลด opacity ของ background บน mobile */
   }
-  100% {
-    filter: hue-rotate(360deg);
+
+  .cyberpunk-line {
+    opacity: 0.3; /* ลด opacity ของ lines บน mobile */
+  }
+
+  .card-hover:hover {
+    transform: scale(
+      1.06
+    ) !important; /* เพิ่ม scale เล็กน้อยสำหรับ natural layout */
+    box-shadow: 0 12px 35px rgba(228, 86, 174, 0.25),
+      0 6px 25px rgba(55, 235, 243, 0.15) !important; /* CyberPunk 2077 shadows */
+    z-index: 999 !important; /* Higher z-index to bring forward */
+    filter: brightness(1.05); /* เพิ่มความสว่างเล็กน้อย */
+  }
+
+  body {
+    font-size: 14px; /* ลดขนาด font base บน mobile */
+  }
+}
+
+/* Touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .card-hover:hover {
+    transform: none !important; /* ปิด hover effects บน touch devices */
+  }
+
+  .card-hover:active {
+    transform: scale(1.05) !important; /* ใช้ active แทน hover */
+    transition: transform 0.1s ease;
+    z-index: 999 !important;
+    box-shadow: 0 6px 25px rgba(228, 86, 174, 0.25),
+      0 3px 15px rgba(55, 235, 243, 0.15) !important;
   }
 }
