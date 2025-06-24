@@ -1,5 +1,60 @@
 @import "tailwindcss";
 
+/* FC Home Font Faces */
+@font-face {
+  font-family: "FC Home";
+  src: url("/font/FC Home Regular ver 1.01.ttf") format("truetype"),
+    url("/font/FC Home Regular ver 1.01.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FC Home";
+  src: url("/font/FC Home Italic ver 1.01.ttf") format("truetype"),
+    url("/font/FC Home Italic ver 1.01.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FC Home";
+  src: url("/font/FC Home Thin ver 1.01.ttf") format("truetype"),
+    url("/font/FC Home Thin ver 1.01.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FC Home";
+  src: url("/font/FC Home Thin Italic ver 1.01.ttf") format("truetype"),
+    url("/font/FC Home Thin Italic ver 1.01.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FC Home";
+  src: url("/font/FC Home Black ver 1.01.ttf") format("truetype"),
+    url("/font/FC Home Black ver 1.01.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FC Home";
+  src: url("/font/FC Home Black Italic ver 1.01.ttf") format("truetype"),
+    url("/font/FC Home Black Italic ver 1.01.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   --background: #fff6ed; /* soft cream */
   --foreground: #1a1a1a; /* dark text for readability */
@@ -26,7 +81,34 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "FC Home", Arial, Helvetica, sans-serif;
+}
+
+/* FC Home Font Utilities */
+.font-fc-home {
+  font-family: "FC Home", Arial, Helvetica, sans-serif;
+}
+
+.font-fc-home-thin {
+  font-family: "FC Home", Arial, Helvetica, sans-serif;
+  font-weight: 300;
+}
+
+.font-fc-home-regular {
+  font-family: "FC Home", Arial, Helvetica, sans-serif;
+  font-weight: 400;
+}
+
+.font-fc-home-black {
+  font-family: "FC Home", Arial, Helvetica, sans-serif;
+  font-weight: 900;
+}
+
+/* Apply FC Home font to all text elements */
+*,
+*::before,
+*::after {
+  font-family: "FC Home", Arial, Helvetica, sans-serif;
 }
 
 /* Cyberpunk Background Styles */

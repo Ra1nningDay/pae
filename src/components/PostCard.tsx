@@ -102,13 +102,13 @@ export default function PostCard({
   return (
     <div
       onClick={onClick}
-      className={`card-hover border-2 rounded-xl shadow-md flex flex-col gap-2 w-full max-w-xl transition-all duration-300 ${
+      className={`card-hover border-2 rounded-xl shadow-md flex flex-col gap-2 w-full max-w-xl transition-all duration-300 font-fc-home ${
         className || ""
       }`}
       style={{
         ...style,
         margin: 8,
-        padding: "16px", // Responsive padding
+        padding: "18px", // Responsive padding - เพิ่มขึ้น
         backgroundColor: postItStyle.backgroundColor,
         borderRadius: postItStyle.borderRadius,
         transform: `${style?.transform || ""} ${postItStyle.transform}`,
@@ -117,31 +117,32 @@ export default function PostCard({
         borderColor: postItStyle.borderColor,
         boxShadow: postItStyle.boxShadow,
         backdropFilter: "blur(10px)",
-        minHeight: "160px", // Ensure consistent card height
+        minHeight: "180px", // Ensure consistent card height - เพิ่มขึ้น
         maxWidth: style?.width || "280px", // Responsive width
       }}
     >
       {" "}
       <div className="flex items-start justify-between mb-2">
+        {" "}
         <h2
-          className="text-base md:text-lg font-bold break-words flex-1 mr-2"
-          style={{ color: "#333333", lineHeight: "1.3" }}
+          className="text-lg md:text-xl font-fc-home-black break-words flex-1 mr-2"
+          style={{ color: "#333333", lineHeight: "1.4" }}
         >
           {post.title}
         </h2>{" "}
         <div
-          className="text-xs text-right flex-shrink-0"
+          className="text-sm text-right flex-shrink-0"
           style={{ color: "#666666" }}
         >
           <div>{new Date(post.createdAt).toLocaleDateString("th-TH")}</div>
         </div>
       </div>{" "}
       <div
-        className="text-xs md:text-sm mb-2 whitespace-pre-line leading-relaxed flex-1"
+        className="text-sm md:text-base mb-3 whitespace-pre-line leading-relaxed flex-1"
         style={{ color: "#444444" }}
       >
-        {post.content.length > 100
-          ? `${post.content.substring(0, 100)}...`
+        {post.content.length > 120
+          ? `${post.content.substring(0, 120)}...`
           : post.content}
       </div>
       {/* Tags */}
@@ -152,7 +153,7 @@ export default function PostCard({
           ) => (
             <span
               key={tag.id}
-              className="px-2 py-1 rounded-full text-xs font-medium border"
+              className="px-2 py-1 rounded-full text-sm font-medium border"
               style={{
                 backgroundColor: "rgba(0, 0, 0, 0.05)",
                 color: "#555555",
@@ -165,16 +166,16 @@ export default function PostCard({
         )}
         {post.tags.length > 3 && (
           <span
-            className="px-2 py-1 rounded-full text-xs font-medium"
+            className="px-2 py-1 rounded-full text-sm font-medium"
             style={{ color: "#888888" }}
           >
             +{post.tags.length - 3}
           </span>
         )}
       </div>
-      {/* Author */}
+      {/* Author */}{" "}
       <div
-        className="text-xs mt-2 pt-2 flex-shrink-0"
+        className="text-sm mt-2 pt-2 flex-shrink-0"
         style={{
           color: "#777777",
           borderTop: "1px solid rgba(0, 0, 0, 0.1)",

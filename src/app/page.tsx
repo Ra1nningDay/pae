@@ -27,14 +27,14 @@ function getTimeRemaining(expiresAt: string): string {
 }
 
 // Constants for board and card dimensions
-const BOARD_WIDTH_DESKTOP = 1600;
-const BOARD_HEIGHT_DESKTOP = 1200;
+const BOARD_WIDTH_DESKTOP = 1920;
+const BOARD_HEIGHT_DESKTOP = 1080;
 const BOARD_WIDTH_MOBILE = 350;
 const BOARD_HEIGHT_MOBILE = 600;
-const CARD_WIDTH_DESKTOP = 340;
-const CARD_HEIGHT_DESKTOP = 210;
-const CARD_WIDTH_MOBILE = 280;
-const CARD_HEIGHT_MOBILE = 180;
+const CARD_WIDTH_DESKTOP = 380; // เพิ่มขึ้นจาก 340
+const CARD_HEIGHT_DESKTOP = 240; // เพิ่มขึ้นจาก 210
+const CARD_WIDTH_MOBILE = 320; // เพิ่มขึ้นจาก 280
+const CARD_HEIGHT_MOBILE = 200; // เพิ่มขึ้นจาก 180
 
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -190,7 +190,7 @@ export default function Home() {
   }, [posts, isMobile, BOARD_WIDTH, BOARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT]);
   return (
     <div
-      className="min-h-screen w-full relative overflow-hidden"
+      className="min-h-screen w-full relative overflow-hidden font-fc-home"
       style={{
         background: "#0a0a0a",
       }}
@@ -223,7 +223,7 @@ export default function Home() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className={`border-2 border-[#37EBF3]/50 rounded-lg px-4 focus:outline-none focus:border-[#37EBF3] focus:shadow-[0_0_20px_rgba(55,235,243,0.5)] w-full bg-black/70 text-white placeholder-gray-300 backdrop-blur-sm transition-all duration-300 ${
-                  isMobile ? "py-2 text-base" : "py-3 text-lg"
+                  isMobile ? "py-3 text-lg" : "py-4 text-xl"
                 }`}
               />
               {loading && (
@@ -238,8 +238,8 @@ export default function Home() {
             </div>{" "}
             <button
               type="submit"
-              className={`bg-gradient-to-r from-[#E456AE] to-[#37EBF3] text-white rounded-lg font-semibold hover:from-[#E456AE]/80 hover:to-[#37EBF3]/80 transition-all duration-300 shadow-[0_0_20px_rgba(228,86,174,0.5)] hover:shadow-[0_0_30px_rgba(228,86,174,0.7)] ${
-                isMobile ? "px-4 py-2 text-sm" : "px-6 py-3 text-lg"
+              className={`bg-gradient-to-r from-[#E456AE] to-[#37EBF3] text-white rounded-lg font-fc-home-black hover:from-[#E456AE]/80 hover:to-[#37EBF3]/80 transition-all duration-300 shadow-[0_0_20px_rgba(228,86,174,0.5)] hover:shadow-[0_0_30px_rgba(228,86,174,0.7)] ${
+                isMobile ? "px-5 py-3 text-base" : "px-7 py-4 text-xl"
               }`}
             >
               ค้นหา
@@ -249,14 +249,14 @@ export default function Home() {
         {/* Search Results Info */}{" "}
         {search && !loading && (
           <div className="text-center mb-4">
-            <p className="text-[#37EBF3] text-sm bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 inline-block border border-[#37EBF3]/30">
+            <p className="text-[#37EBF3] text-base bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 inline-block border border-[#37EBF3]/30">
               {posts.length > 0
                 ? `พบ ${posts.length} โพสต์สำหรับ "${search}"`
                 : `ไม่พบโพสต์สำหรับ "${search}"`}
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="ml-2 text-[#E456AE] hover:text-[#E456AE]/80 hover:underline text-sm transition-colors"
+                  className="ml-2 text-[#E456AE] hover:text-[#E456AE]/80 hover:underline text-base transition-colors"
                 >
                   แสดงทั้งหมด
                 </button>
@@ -283,13 +283,13 @@ export default function Home() {
             <div className="text-[#37EBF3] text-center pt-20">
               <div className="inline-flex items-center gap-3 bg-black/70 backdrop-blur-sm rounded-lg px-6 py-4 border border-[#37EBF3]/30">
                 <div className="animate-spin h-6 w-6 border-2 border-[#37EBF3] border-t-transparent rounded-full"></div>
-                <span className="text-lg">กำลังโหลดโพสต์...</span>
+                <span className="text-xl">กำลังโหลดโพสต์...</span>
               </div>
             </div>
           ) : posts.length === 0 ? (
             <div className="text-center pt-20">
               <div className="inline-block bg-black/70 backdrop-blur-sm rounded-lg px-6 py-4 border border-[#E456AE]/30">
-                <span className="text-[#E456AE] text-lg">ไม่พบโพสต์</span>
+                <span className="text-[#E456AE] text-xl">ไม่พบโพสต์</span>
               </div>
             </div>
           ) : isMobile ? (
@@ -338,7 +338,7 @@ export default function Home() {
                       onClick={() => setSelectedPost(post)}
                       patternIndex={i}
                       style={{
-                        width: "285px",
+                        width: "315px", // เพิ่มขึ้น
                         margin: "0",
                       }}
                       className="transition-all duration-300 cursor-pointer hover:scale-105 hover:z-[999] block shadow-lg"
@@ -372,20 +372,23 @@ export default function Home() {
         <button
           className={`fixed bg-gradient-to-r from-[#E456AE] to-[#710000] text-white rounded-full flex flex-col items-center justify-center hover:scale-110 transition-all duration-300 z-50 font-bold shadow-[0_0_20px_rgba(228,86,174,0.6)] hover:shadow-[0_0_30px_rgba(228,86,174,0.8)] border border-[#E456AE]/30 ${
             isMobile
-              ? "bottom-6 right-6 w-16 h-16 text-lg gap-0"
-              : "bottom-8 right-8 w-20 h-20 text-xl gap-1"
+              ? "bottom-6 right-6 w-20 h-20 text-xl gap-0"
+              : "bottom-8 right-8 w-24 h-24 text-2xl gap-1"
           }`}
           onClick={() => setShowModal(true)}
           aria-label="แปะโพสต์"
         >
+          {" "}
           <span
             className={
-              isMobile ? "text-2xl leading-none" : "text-3xl leading-none"
+              isMobile ? "text-3xl leading-none" : "text-4xl leading-none"
             }
           >
             +
           </span>
-          {!isMobile && <span className="text-xs font-semibold">แปะโพสต์</span>}
+          {!isMobile && (
+            <span className="text-sm font-fc-home-black">แปะโพสต์</span>
+          )}
         </button>{" "}
         {/* Modal for Post Details */}
         {selectedPost && (
@@ -406,32 +409,34 @@ export default function Home() {
               <div className="space-y-6">
                 {/* Header */}
                 <div className="border-b border-gray-200 pb-4">
+                  {" "}
                   <h2
-                    className={`font-bold text-blue-600 mb-2 ${
-                      isMobile ? "text-xl" : "text-2xl"
+                    className={`font-fc-home-black text-blue-600 mb-2 ${
+                      isMobile ? "text-2xl" : "text-3xl"
                     }`}
                   >
                     {selectedPost.title}
                   </h2>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-base">
                     โดย {selectedPost.authorName} •{" "}
                     {new Date(selectedPost.createdAt).toLocaleDateString(
                       "th-TH"
                     )}
                   </p>
                   {selectedPost.expiresAt && (
-                    <p className="text-orange-600 text-sm mt-1 font-medium">
+                    <p className="text-orange-600 text-base mt-1 font-medium">
                       ⏰ {getTimeRemaining(selectedPost.expiresAt)}
                     </p>
                   )}
                 </div>
                 {/* Content */}
                 <div className="text-gray-800 leading-relaxed">
-                  <h3 className="text-lg font-semibold text-blue-600 mb-3">
+                  {" "}
+                  <h3 className="text-xl font-fc-home-black text-blue-600 mb-3">
                     เนื้อหา:
                   </h3>
                   <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                    <p className="whitespace-pre-wrap">
+                    <p className="whitespace-pre-wrap text-base leading-relaxed">
                       {selectedPost.content}
                     </p>
                   </div>
@@ -454,14 +459,15 @@ export default function Home() {
                 {/* Tags */}
                 {selectedPost.tags && selectedPost.tags.length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold text-blue-600 mb-3">
+                    {" "}
+                    <h3 className="text-xl font-fc-home-black text-blue-600 mb-3">
                       แท็ก:
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedPost.tags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="px-3 py-1 bg-green-100 text-green-700 border border-green-300 rounded-full text-sm font-medium"
+                          className="px-3 py-1 bg-green-100 text-green-700 border border-green-300 rounded-full text-base font-medium"
                         >
                           #{tag.name}
                         </span>
@@ -488,10 +494,10 @@ export default function Home() {
                 aria-label="Close"
               >
                 ×
-              </button>
+              </button>{" "}
               <h2
-                className={`font-bold mb-4 text-center text-[#37EBF3] ${
-                  isMobile ? "text-lg" : "text-xl"
+                className={`font-fc-home-black mb-4 text-center text-[#37EBF3] ${
+                  isMobile ? "text-xl" : "text-2xl"
                 }`}
               >
                 แปะโพสต์ใหม่
