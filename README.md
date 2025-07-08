@@ -19,10 +19,28 @@ A web app for university students to post and view announcements.
 
 - **Welcome Page**: First-time users enter their name (stored in localStorage)
 - **Homepage**: View all posts, search/filter by hashtags, create new posts
-- **Graphical Post Creation**: Mind-map style modal for creating posts
-- **Post Details**: Each post shows title, author, hashtags, content, and contact info
+- **Animated Neon Background**: Cyberpunk-style animated lines with glow effects
+- **Real-time Search**: Debounced search with live results
+- **Post Creation**: Mind-map style modal for creating posts
+- **Content Moderation**: Thai bad words filtering
+- **IP Address Tracking**: Automatic IP address collection for moderation
+- **Admin Panel**: View posts with IP addresses and statistics
+- **Glass Morphism UI**: Modern transparent design with backdrop blur
 - **API**: RESTful endpoints for posts (GET, POST, search by tag)
 - **Database**: PostgreSQL with Prisma ORM
+
+---
+
+## Admin Panel
+
+Access the admin panel at `/admin` to:
+
+- View all posts with IP addresses
+- See user statistics
+- Monitor content and users
+- Default password: `admin123` (change in `.env`)
+
+**Security Note**: In production, implement proper authentication with JWT tokens or session management.
 
 ---
 

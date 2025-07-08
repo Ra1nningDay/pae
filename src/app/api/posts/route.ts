@@ -19,17 +19,25 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   let q = searchParams.get("tag");
   if (q) q = q.trim();
+
   let posts;
   if (q && q.length > 0) {
     if (q.startsWith("#")) {
       const tagName = q.slice(1);
       posts = await prisma.post.findMany({
         where: {
-          tags: {
-            some: {
-              name: { equals: tagName, mode: "insensitive" },
+          AND: [
+            {
+              OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
             },
-          },
+            {
+              tags: {
+                some: {
+                  name: { equals: tagName, mode: "insensitive" },
+                },
+              },
+            },
+          ],
         },
         include: { tags: true },
         orderBy: { createdAt: "desc" },
@@ -37,7 +45,14 @@ export async function GET(req: NextRequest) {
     } else {
       posts = await prisma.post.findMany({
         where: {
-          title: { contains: q, mode: "insensitive" },
+          AND: [
+            {
+              OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+            },
+            {
+              title: { contains: q, mode: "insensitive" },
+            },
+          ],
         },
         include: { tags: true },
         orderBy: { createdAt: "desc" },
@@ -45,6 +60,9 @@ export async function GET(req: NextRequest) {
     }
   } else {
     posts = await prisma.post.findMany({
+      where: {
+        OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+      },
       include: { tags: true },
       orderBy: { createdAt: "desc" },
     });
@@ -62,6 +80,11 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  // Calculate expiration time (24 hours from now)
+  const expiresAt = new Date();
+  expiresAt.setHours(expiresAt.getHours() + 24);
+
   // Split tags and upsert
   const tagArr = tags
     .split(",")
@@ -83,6 +106,7 @@ export async function POST(req: NextRequest) {
       contactInfo,
       authorName,
       author_ipaddress: authorIpaddress || "",
+      expiresAt,
       tags: {
         connect: tagRecords.map((t) => ({ id: t.id })),
       },

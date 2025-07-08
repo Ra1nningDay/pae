@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import api from "@/lib/axios";
+import { getUserIpAddress } from "@/lib/utils/getIpAddress";
 
 export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
   const [title, setTitle] = useState("");
@@ -9,7 +10,6 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
   const [tags, setTags] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -48,6 +48,13 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
       setError("Author name missing.");
       setLoading(false);
       return;
+    } // Get user's IP address
+    let userIpAddress = "";
+    try {
+      userIpAddress = await getUserIpAddress();
+    } catch (ipError) {
+      console.error("Failed to get IP address:", ipError);
+      userIpAddress = "unknown";
     }
 
     // Call api to create the post
@@ -60,7 +67,7 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
       contactInfo,
       tags,
       authorName,
-      authorIpaddress: "",
+      authorIpaddress: userIpAddress,
     });
     if (res) {
       setTitle("");
