@@ -115,11 +115,8 @@ export default function Home() {
       scale: number;
     }[] = [];
 
-    const centerX = BOARD_WIDTH / 2;
-    const centerY = BOARD_HEIGHT / 2;
     const margin = isMobile ? 20 : 60;
     const minDistance = isMobile ? 60 : 100;
-    const avoidCenterRadius = isMobile ? 150 : 300;
 
     for (let i = 0; i < posts.length; i++) {
       let left: number, top: number;

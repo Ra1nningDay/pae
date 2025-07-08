@@ -8,7 +8,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function DELETE(req: NextRequest) {
+export async function DELETE(_req: NextRequest) {
   try {
     // Delete posts where expiresAt is in the past
     const now = new Date();
@@ -59,7 +59,7 @@ export async function DELETE(req: NextRequest) {
 }
 
 // GET method to check what posts are expired
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   try {
     const now = new Date();
 
