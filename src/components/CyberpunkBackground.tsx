@@ -2,52 +2,23 @@ import React from "react";
 
 const CyberpunkBackground: React.FC = () => {
   return (
-    <div className="cyberpunk-background">
-      {/* Horizontal Lines */}
-      {Array.from({ length: 12 }).map((_, i) => (
-        <div
-          key={`h-${i}`}
-          className={`cyberpunk-line cyberpunk-line-horizontal cyberpunk-horizontal-${
-            i % 3
-          }`}
-          style={{
-            top: `${(i + 1) * 8.33}%`,
-            animationDelay: `${i * 0.2}s`,
-            animationDuration: `${3 + i * 0.2}s`,
-          }}
-        />
-      ))}
+    <div className="gradient-background">
+      {/* Beautiful gradient background image */}
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url(/bg.jpeg)",
+          filter: "brightness(0.8) contrast(1.1)",
+        }}
+      />
 
-      {/* Vertical Lines */}
-      {Array.from({ length: 10 }).map((_, i) => (
-        <div
-          key={`v-${i}`}
-          className={`cyberpunk-line cyberpunk-line-vertical cyberpunk-vertical-${
-            i % 3
-          }`}
-          style={{
-            left: `${(i + 1) * 10}%`,
-            animationDelay: `${i * 0.3}s`,
-            animationDuration: `${4 + i * 0.3}s`,
-          }}
-        />
-      ))}
-
-      {/* Diagonal Lines */}
-      {Array.from({ length: 8 }).map((_, i) => (
-        <div
-          key={`d-${i}`}
-          className={`cyberpunk-line cyberpunk-line-diagonal cyberpunk-diagonal-${
-            i % 2
-          }`}
-          style={{
-            top: `${(i + 1) * 12.5}%`,
-            transform: `rotate(${i % 2 === 0 ? "15deg" : "-15deg"})`,
-            animationDelay: `${i * 0.4}s`,
-            animationDuration: `${5 + i * 0.4}s`,
-          }}
-        />
-      ))}
+      {/* Subtle animated overlay for depth */}
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-blue-900/20 animate-pulse"
+        style={{
+          animationDuration: "4s",
+        }}
+      />
     </div>
   );
 };

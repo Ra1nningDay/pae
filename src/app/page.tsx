@@ -5,6 +5,7 @@ import PostForm from "../components/PostForm";
 import CyberpunkBackground from "../components/CyberpunkBackground";
 import CyberpunkWatermark from "../components/CyberpunkWatermark";
 import { useRouter } from "next/navigation";
+import { Search, X, Sparkles, Zap } from "lucide-react";
 
 // Helper function to calculate time remaining
 function getTimeRemaining(expiresAt: string): string {
@@ -43,7 +44,13 @@ export default function Home() {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+
+  // Ensure client-side only rendering for particles
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // ตรวจสอบ Mobile
   useEffect(() => {
@@ -189,63 +196,116 @@ export default function Home() {
     <div
       className="min-h-screen w-full relative overflow-hidden font-fc-home"
       style={{
-        background: "#0a0a0a",
+        background:
+          "linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #e94560 100%)",
       }}
     >
-      {/* Cyberpunk Animated Background */}
-      <CyberpunkBackground /> {/* Dark overlay for content readability */}
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" />
+      {/* Beautiful Gradient Background */}
+      <CyberpunkBackground />
+
+      {/* Floating particles animation */}
+      {isClient && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={i}
+              className={`absolute rounded-full opacity-20 animate-float ${
+                i % 3 === 0 ? "w-1 h-1" : i % 3 === 1 ? "w-2 h-2" : "w-3 h-3"
+              }`}
+              style={{
+                background:
+                  i % 2 === 0
+                    ? "linear-gradient(45deg, #37EBF3, #E456AE)"
+                    : "linear-gradient(45deg, #E456AE, #37EBF3)",
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 8}s`,
+                animationDuration: `${4 + Math.random() * 6}s`,
+              }}
+            />
+          ))}
+
+          {/* Larger glowing orbs */}
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={`orb-${i}`}
+              className="absolute w-20 h-20 rounded-full opacity-5 animate-float"
+              style={{
+                background:
+                  "radial-gradient(circle, #37EBF3 0%, transparent 70%)",
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 10}s`,
+                animationDuration: `${8 + Math.random() * 4}s`,
+                filter: "blur(2px)",
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Subtle overlay for content readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-purple-900/5 to-blue-900/10 backdrop-blur-[0.5px]" />
       {/* Watermark "แปะ!" */}
       <CyberpunkWatermark />
+      {/* Search Bar - Fixed Position */}
+      <header
+        className={`fixed top-0 left-0 right-0 flex justify-center z-30 ${
+          isMobile ? "py-4 px-4" : "py-6"
+        }  border-white/10 animate-slideDown`}
+      >
+        <form
+          onSubmit={handleSearch}
+          className={`w-full flex gap-2 ${isMobile ? "max-w-sm" : "max-w-lg"}`}
+        >
+          <div className="relative w-full group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#37EBF3] w-5 h-5 group-focus-within:scale-110 transition-transform duration-300" />
+            <input
+              type="text"
+              placeholder={isMobile ? "ค้นหา #tag" : "ค้นหา #tag หรือคำค้นหา"}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className={`border-2 border-[#37EBF3]/50 rounded-lg pl-10 pr-4 focus:outline-none focus:border-[#37EBF3] focus:shadow-[0_0_20px_rgba(55,235,243,0.5)] w-full bg-black/70 text-white placeholder-gray-300 backdrop-blur-sm transition-all duration-300 hover:border-[#37EBF3]/70 ${
+                isMobile ? "py-3 text-lg" : "py-4 text-xl"
+              }`}
+            />
+            {loading && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                <div
+                  className={`animate-spin border-2 border-[#37EBF3] border-t-transparent rounded-full ${
+                    isMobile ? "h-4 w-4" : "h-5 w-5"
+                  }`}
+                ></div>
+              </div>
+            )}
+          </div>
+          <button
+            type="submit"
+            className={`bg-gradient-to-r from-[#E456AE] to-[#37EBF3] text-white rounded-lg font-fc-home-black hover:from-[#E456AE]/80 hover:to-[#37EBF3]/80 transition-all duration-300 shadow-[0_0_20px_rgba(228,86,174,0.5)] hover:scale-105 group flex items-center justify-center cursor-pointer ${
+              isMobile
+                ? "px-4 py-3 text-base min-w-[80px]"
+                : "px-6 py-4 text-xl min-w-[120px]"
+            }`}
+          >
+            <Sparkles
+              className={`group-hover:animate-pulse ${
+                isMobile ? "w-4 h-4 mr-1" : "w-5 h-5 mr-2"
+              }`}
+            />
+            <span className="whitespace-nowrap">ค้นหา</span>
+          </button>
+        </form>
+      </header>
       {/* Content */}
       <div className="relative z-20">
         {" "}
-        {/* Search Bar */}
-        <header
-          className={`flex justify-center z-20 ${
-            isMobile ? "py-4 px-4" : "py-8"
-          }`}
-        >
-          <form
-            onSubmit={handleSearch}
-            className={`w-full flex gap-2 ${
-              isMobile ? "max-w-sm" : "max-w-lg"
-            }`}
-          >
-            <div className="relative w-full">
-              {" "}
-              <input
-                type="text"
-                placeholder={isMobile ? "ค้นหา #tag" : "ค้นหา #tag หรือคำค้นหา"}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className={`border-2 border-[#37EBF3]/50 rounded-lg px-4 focus:outline-none focus:border-[#37EBF3] focus:shadow-[0_0_20px_rgba(55,235,243,0.5)] w-full bg-black/70 text-white placeholder-gray-300 backdrop-blur-sm transition-all duration-300 ${
-                  isMobile ? "py-3 text-lg" : "py-4 text-xl"
-                }`}
-              />
-              {loading && (
-                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <div
-                    className={`animate-spin border-2 border-[#37EBF3] border-t-transparent rounded-full ${
-                      isMobile ? "h-4 w-4" : "h-5 w-5"
-                    }`}
-                  ></div>
-                </div>
-              )}
-            </div>{" "}
-            <button
-              type="submit"
-              className={`bg-gradient-to-r from-[#E456AE] to-[#37EBF3] text-white rounded-lg font-fc-home-black hover:from-[#E456AE]/80 hover:to-[#37EBF3]/80 transition-all duration-300 shadow-[0_0_20px_rgba(228,86,174,0.5)] hover:shadow-[0_0_30px_rgba(228,86,174,0.7)] ${
-                isMobile ? "px-5 py-3 text-base" : "px-7 py-4 text-xl"
-              }`}
-            >
-              ค้นหา
-            </button>
-          </form>{" "}
-        </header>{" "}
         {/* Search Results Info */}{" "}
         {search && !loading && (
-          <div className="text-center mb-4">
+          <div
+            className={`fixed left-1/2 transform -translate-x-1/2 z-25 ${
+              isMobile ? "top-20" : "top-24"
+            }`}
+          >
             <p className="text-[#37EBF3] text-base bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 inline-block border border-[#37EBF3]/30">
               {posts.length > 0
                 ? `พบ ${posts.length} โพสต์สำหรับ "${search}"`
@@ -263,84 +323,55 @@ export default function Home() {
         )}{" "}
         {/* Scatter Board */}{" "}
         <main
-          className={`relative flex-1 mx-auto w-full bg-transparent ${
+          className={`relative mx-auto w-full bg-transparent ${
             isMobile
-              ? "overflow-y-auto max-w-full" // Allow scrolling on mobile
-              : "overflow-hidden min-h-[1200px]"
+              ? "h-screen overflow-hidden pt-24" // Remove scrolling and set fixed height for mobile
+              : "overflow-hidden h-screen"
           }`}
           style={{
-            minHeight: isMobile
-              ? `${posts.length * 100 + 300}px`
-              : BOARD_HEIGHT,
-            height: isMobile ? "auto" : BOARD_HEIGHT,
+            height: "100vh",
           }}
         >
           {" "}
           {loading ? (
-            <div className="text-[#37EBF3] text-center pt-20">
-              <div className="inline-flex items-center gap-3 bg-black/70 backdrop-blur-sm rounded-lg px-6 py-4 border border-[#37EBF3]/30">
-                <div className="animate-spin h-6 w-6 border-2 border-[#37EBF3] border-t-transparent rounded-full"></div>
-                <span className="text-xl">กำลังโหลดโพสต์...</span>
+            <div className="absolute inset-0 flex items-center justify-center animate-fadeIn">
+              <div className="inline-flex items-center gap-3 bg-black/70 backdrop-blur-sm rounded-lg px-6 py-4 border border-[#37EBF3]/30 animate-pulse">
+                <Zap className="w-6 h-6 text-[#37EBF3] animate-spin" />
+                <span className="text-xl text-[#37EBF3]">
+                  กำลังโหลดโพสต์...
+                </span>
               </div>
             </div>
           ) : posts.length === 0 ? (
-            <div className="text-center pt-20">
+            <div className="absolute inset-0 flex items-center justify-center animate-fadeIn">
               <div className="inline-block bg-black/70 backdrop-blur-sm rounded-lg px-6 py-4 border border-[#E456AE]/30">
                 <span className="text-[#E456AE] text-xl">ไม่พบโพสต์</span>
               </div>
             </div>
           ) : isMobile ? (
-            // Mobile: Natural scattered card layout
-            <div className="pt-4 pb-20 px-2 relative">
+            // Mobile: Absolute positioned scattered layout like desktop
+            <div className="absolute inset-0 w-full h-full">
               {posts.map((post, i) => {
-                // More natural positioning algorithm
-                const isLeft = i % 2 === 0;
-                const baseVerticalSpacing = 100;
-                const randomVerticalOffset = Math.sin(i * 2.5) * 20; // Natural variation
-                const randomHorizontalOffset = Math.cos(i * 1.8) * 15; // Subtle horizontal drift
-
-                // More natural rotation based on position and index
-                const baseRotation = isLeft ? -2 : 2;
-                const randomRotation = Math.sin(i * 1.2) * 3; // Natural rotation variation
-                const totalRotation = baseRotation + randomRotation;
-
-                // Natural horizontal positioning with some randomness
-                const leftPosition = isLeft
-                  ? Math.max(5, 15 + randomHorizontalOffset)
-                  : "auto";
-                const rightPosition = !isLeft
-                  ? Math.max(5, 15 + Math.abs(randomHorizontalOffset))
-                  : "auto";
+                // Use the same positioning logic as desktop but with mobile dimensions
+                const position = cardPositions[i];
+                if (!position) return null;
 
                 return (
-                  <div
+                  <PostCard
                     key={post.id}
-                    className="absolute"
+                    post={post}
+                    onClick={() => setSelectedPost(post)}
+                    patternIndex={i}
                     style={{
-                      left:
-                        leftPosition !== "auto" ? `${leftPosition}px` : "auto",
-                      right:
-                        rightPosition !== "auto"
-                          ? `${rightPosition}px`
-                          : "auto",
-                      top: `${
-                        i * baseVerticalSpacing + randomVerticalOffset
-                      }px`,
-                      zIndex: posts.length - i + 5,
-                      transform: `rotate(${totalRotation}deg)`,
+                      position: "absolute",
+                      left: position.left,
+                      top: position.top,
+                      width: CARD_WIDTH,
+                      transform: `rotate(${position.rotate}deg) scale(${position.scale})`,
+                      zIndex: position.z,
                     }}
-                  >
-                    <PostCard
-                      post={post}
-                      onClick={() => setSelectedPost(post)}
-                      patternIndex={i}
-                      style={{
-                        width: "315px", // เพิ่มขึ้น
-                        margin: "0",
-                      }}
-                      className="transition-all duration-300 cursor-pointer hover:scale-105 hover:z-[999] block shadow-lg"
-                    />
-                  </div>
+                    className="transition-all duration-300 cursor-pointer hover:scale-105 hover:z-[999]"
+                  />
                 );
               })}
             </div>
@@ -365,7 +396,7 @@ export default function Home() {
             ))
           )}
         </main>{" "}
-        {/* Floating Action Button */}{" "}
+        {/* Floating Action Button */}
         <button
           className={`fixed bg-gradient-to-r from-[#E456AE] to-[#710000] text-white rounded-full flex flex-col items-center justify-center hover:scale-110 transition-all duration-300 z-50 font-bold shadow-[0_0_20px_rgba(228,86,174,0.6)] hover:shadow-[0_0_30px_rgba(228,86,174,0.8)] border border-[#E456AE]/30 ${
             isMobile
@@ -386,21 +417,21 @@ export default function Home() {
           {!isMobile && (
             <span className="text-sm font-fc-home-black">แปะโพสต์</span>
           )}
-        </button>{" "}
+        </button>
         {/* Modal for Post Details */}
         {selectedPost && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[110] p-4 animate-fadeIn">
             <div
-              className={`bg-white rounded-xl p-8 relative max-h-[90vh] overflow-y-auto border border-gray-200 shadow-[0_20px_60px_rgba(0,0,0,0.3)] ${
+              className={`bg-white rounded-xl p-8 relative max-h-[90vh] overflow-y-auto border border-gray-200 shadow-[0_20px_60px_rgba(0,0,0,0.3)] animate-scaleIn ${
                 isMobile ? "w-full max-w-sm mx-4" : "w-[600px] max-w-full"
               }`}
             >
               <button
-                className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-3xl font-bold transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-3xl font-bold transition-colors z-10 hover:rotate-90 duration-300"
                 onClick={() => setSelectedPost(null)}
                 aria-label="Close"
               >
-                ×
+                <X className="w-6 h-6" />
               </button>
 
               <div className="space-y-6">
@@ -478,24 +509,25 @@ export default function Home() {
         )}{" "}
         {/* Modal for PostForm */}
         {showModal && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
             {" "}
             <div
-              className={`bg-black/80 backdrop-blur-lg rounded-xl p-8 relative border border-[#37EBF3]/30 shadow-[0_0_40px_rgba(55,235,243,0.3)] ${
+              className={`bg-black/80 backdrop-blur-lg rounded-xl p-8 relative border border-[#37EBF3]/30 shadow-[0_0_40px_rgba(55,235,243,0.3)] animate-scaleIn ${
                 isMobile ? "w-full max-w-sm mx-4" : "w-[420px] max-w-full"
               }`}
             >
               <button
-                className="absolute top-2 right-2 text-[#37EBF3] hover:text-[#E456AE] text-2xl font-bold transition-colors"
+                className="absolute top-2 right-2 text-[#37EBF3] hover:text-[#E456AE] text-2xl font-bold transition-colors hover:rotate-90 duration-300"
                 onClick={() => setShowModal(false)}
                 aria-label="Close"
               >
-                ×
+                <X className="w-6 h-6" />
               </button>{" "}
               <h2
-                className={`font-fc-home-black mb-4 text-center text-[#37EBF3] ${
+                className={`font-fc-home-black mb-4 text-center ${
                   isMobile ? "text-xl" : "text-2xl"
                 }`}
+                style={{ color: "#ffffff" }}
               >
                 แปะโพสต์ใหม่
               </h2>
