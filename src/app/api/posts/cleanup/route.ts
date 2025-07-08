@@ -3,12 +3,12 @@
  * This endpoint can be called manually or by a cron job
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function DELETE(_req: NextRequest) {
+export async function DELETE() {
   try {
     // Delete posts where expiresAt is in the past
     const now = new Date();
@@ -59,7 +59,7 @@ export async function DELETE(_req: NextRequest) {
 }
 
 // GET method to check what posts are expired
-export async function GET(_req: NextRequest) {
+export async function GET() {
   try {
     const now = new Date();
 
