@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import api from "@/lib/axios";
 import { getUserIpAddress } from "@/lib/utils/getIpAddress";
+import { Send, AlertCircle, Loader } from "lucide-react";
 
 export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
   const [title, setTitle] = useState("");
@@ -84,19 +85,20 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-md mx-auto bg-[var(--card)] p-8 flex flex-col gap-5 relative"
+      className="w-full max-w-md mx-auto bg-[var(--card)] p-8 flex flex-col gap-5 relative animate-scaleIn"
     >
       {/* ... ส่วน JSX ที่เหลือเหมือนเดิมทั้งหมด ... */}
       <div className="flex flex-col gap-2">
         <label
-          className="text-sm font-medium text-[var(--primary)]"
+          className="text-sm font-medium text-[var(--primary)] flex items-center gap-2"
           htmlFor="title"
         >
+          <span className="w-2 h-2 bg-[#37EBF3] rounded-full animate-pulse"></span>
           หัวข้อ
         </label>
         <input
           id="title"
-          className="text-base px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent"
+          className="text-base px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent transition-all duration-300 hover:border-[#37EBF3]/50 focus:scale-105"
           placeholder="ใส่หัวข้อโพสต์"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -105,14 +107,15 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
       </div>
       <div className="flex flex-col gap-2">
         <label
-          className="text-sm font-medium text-[var(--primary)]"
+          className="text-sm font-medium text-[var(--primary)] flex items-center gap-2"
           htmlFor="content"
         >
+          <span className="w-2 h-2 bg-[#E456AE] rounded-full animate-pulse"></span>
           เนื้อหา
         </label>
         <textarea
           id="content"
-          className="resize-none px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent min-h-[80px]"
+          className="resize-none px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent min-h-[80px] transition-all duration-300 hover:border-[#37EBF3]/50 focus:scale-105"
           placeholder="เขียนเนื้อหาโพสต์..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
@@ -138,14 +141,15 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
       </div>
       <div className="flex flex-col gap-2">
         <label
-          className="text-sm font-medium text-[var(--primary)]"
+          className="text-sm font-medium text-[var(--primary)] flex items-center gap-2"
           htmlFor="tags"
         >
+          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
           แท็ก
         </label>
         <input
           id="tags"
-          className="text-base px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent"
+          className="text-base px-3 py-2 rounded border border-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-transparent transition-all duration-300 hover:border-[#37EBF3]/50 focus:scale-105"
           placeholder="คั่นด้วย , เช่น event,news"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
@@ -153,14 +157,27 @@ export default function PostForm({ onSuccess }: { onSuccess: () => void }) {
         />
       </div>
       {error && (
-        <div className="text-red-500 text-sm text-center mt-2">{error}</div>
+        <div className="text-red-500 text-sm text-center mt-2 flex items-center justify-center gap-2 animate-fadeIn bg-red-50 p-3 rounded-lg border border-red-200">
+          <AlertCircle className="w-4 h-4" />
+          {error}
+        </div>
       )}
       <button
         type="submit"
-        className="mt-2 bg-[var(--button)] text-white rounded-lg px-6 py-2 font-semibold shadow hover:brightness-110 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+        className="mt-2 bg-[var(--button)] text-white rounded-lg px-6 py-2 font-semibold shadow hover:brightness-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed hover:scale-105 btn-ripple flex items-center justify-center gap-2"
         disabled={loading}
       >
-        {loading ? "กำลังโพสต์..." : "แปะโพสต์"}
+        {loading ? (
+          <>
+            <Loader className="w-4 h-4 animate-spin" />
+            กำลังโพสต์...
+          </>
+        ) : (
+          <>
+            <Send className="w-4 h-4" />
+            แปะโพสต์
+          </>
+        )}
       </button>
     </form>
   );
