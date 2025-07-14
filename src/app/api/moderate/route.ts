@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   if (!text || typeof text !== "string" || text.trim() === "") {
     return NextResponse.json(
       { error: "Invalid or missing text input" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
             },
           ],
         }),
-      },
+      }
     );
 
     const gptData = await gptResponse.json();
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     console.error("Moderation error:", error);
     return NextResponse.json(
       { error: "Failed to moderate content" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
